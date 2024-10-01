@@ -5,6 +5,7 @@ import org.example.demo.db.ItemDB;
 import java.util.Collection;
 
 public class Item {
+    public String getDescription;
     private String name;
     private int price;
     private int id;
