@@ -1,34 +1,18 @@
-<%--
-Register
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>Register</title>
+    <title>Login</title>
 </head>
 <body>
-<h1>Register</h1>
-<form action="${pageContext.request.contextPath}/controller?action=register" method="POST">
-    <table>
-        <tr>
-            <td>
-                <label>
-                    Username
-                    <input type="text" name="username"/>
-                </label>
-            </td>
-            <td>
-                <label>
-                    Password
-                    <input type="password" name="password"/>
-                </label>
-            </td>
-            <td>
-                <input type="submit" value="Register" />
-            </td>
-        </tr>
-    </table>
+<h2>Login</h2>
+<form method="post" action="user-servlet?action=login">
+    <label for="username">Username:</label>
+    <input type="text" id="username" name="username" required>
+    <br><br>
+    <label for="password">Password:</label>
+    <input type="password" id="password" name="password" required>
+    <input type="checkbox" id="rememberMe" name="rememberMe"> Remember me<br><br>
+    <input type="submit" value="Login">
 </form>
-</table>
 </body>
 </html>
