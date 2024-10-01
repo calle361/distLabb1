@@ -10,7 +10,7 @@ public class DBManager{
 
     private String username = "root";
     private String password = "123";
-    private Connection connection;
+    private static Connection connection;
 
     /**
      * Skapar en anslutning till databasen med angivet namn
@@ -48,7 +48,7 @@ public class DBManager{
      * Returnerar den nuvarande anslutningen
      * @return Databasanslutningen
      */
-    public Connection getConnection() {
+    public static Connection getConnection() {
         return connection;
     }
 }
