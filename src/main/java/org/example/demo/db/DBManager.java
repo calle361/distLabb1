@@ -12,6 +12,10 @@ public class DBManager{
     private String password = "123";
     private Connection connection;
 
+    public static String getDefaultDatabase() {
+        return DEFAULT_DB;
+    }
+
     /**
      * Skapar en anslutning till databasen med angivet namn
      * @param database Namnet på databasen
