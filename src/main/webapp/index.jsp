@@ -33,10 +33,14 @@
 </ul>
 <a href="login.jsp">login</a>
 
+<%
+    Collection<ItemInfo> items= ItemHandler.getAllItems();
+    Iterator<ItemInfo> it= items.iterator();
+    for (; it.hasNext();){
+        ItemInfo item=it.next();%>
 
-<<<<<<< HEAD
-=======
+<%=item.getName()%>: <%=item.getAmount()%><br>
+<%}%>
 
->>>>>>> 36ee1bf86cb74338f0b4370ce1896354e0a91804
 </body>
 </html>

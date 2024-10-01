@@ -2,28 +2,39 @@ package org.example.demo.bo;
 
 import org.example.demo.db.ItemDB;
 
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Collection;
 
 public class Item {
-    public String getDescription;
     private String name;
     private int price;
     private int id;
-    private int amount;
+    private int amount; // Or consider renaming to stock
     private String description;
 
-    static public Collection getItems(){
-        return ItemDB.getItems();
-    }
-
-    protected Item(int id, String name,String description, int price, int amount) {
+    // Constructor to initialize Item object
+    public Item(int id, String name, String description, int price, int amount) {
         this.id = id;
         this.name = name;
-        this.description=description;
+        this.description = description;
         this.price = price;
         this.amount = amount;
     }
 
+    // Static method to get all items from the database
+    public static Collection<Item> getItems() {
+        Collection<Item> items = new ArrayList<>();
+        try {
+            items = ItemDB.getItems();  // Fetch items and catch any SQLException that occurs
+        } catch (SQLException e) {
+            e.printStackTrace();  // Print the stack trace or log it
+            // You can also handle the error gracefully here
+        }
+        return items;  // Return an empty collection or partial results in case of an error
+    }
+
+    // Getters and setters for the fields
     public String getName() {
         return name;
     }
@@ -54,5 +65,13 @@ public class Item {
 
     public void setAmount(int amount) {
         this.amount = amount;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }
