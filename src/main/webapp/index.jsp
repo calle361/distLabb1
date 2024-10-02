@@ -1,6 +1,7 @@
 <%@ page import="org.example.demo.db.UserDB" %>
 <%@ page import="org.example.demo.db.DBManager" %>
 <%@ page import="org.example.demo.bo.User" %>
+<%@ page import="org.example.demo.bo.PermissionLevel" %>
 <%@ page import="java.sql.Connection" %>
 <%@ page import="java.util.Collection" %>
 <%@ page import="org.example.demo.ui.ItemInfo" %>
@@ -11,7 +12,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>JSP - Hello World</title>
+    <title>JSP - Store</title>
 </head>
 <body>
 
@@ -20,13 +21,13 @@
 %>
 
 <%
-    // Kontrollera om användaren redan är inloggad via session
     String sessionUsername = (String) session.getAttribute("username");
+    PermissionLevel permissionLevel = (PermissionLevel) session.getAttribute("permissionLevel");
+
     if (sessionUsername == null) {
         String username = null;
         String password = null;
 
-        // Kolla cookies för att logga in användaren automatiskt
         Cookie[] cookies = request.getCookies();
         if (cookies != null) {
             for (Cookie cookie : cookies) {
@@ -39,13 +40,14 @@
         }
 
         if (username != null && password != null) {
-            // Använd cookies för att automatiskt logga in användaren
             try (Connection connection = DBManager.getConnection()) {
                 if (connection != null) {
                     User user = UserDB.login(connection, username, password);
                     if (user != null) {
                         session.setAttribute("username", username);
-                        sessionUsername = username; // För att visa välkomstmeddelande
+                        session.setAttribute("permissionLevel", user.getPermissionLevel());
+                        sessionUsername = username;
+                        permissionLevel = user.getPermissionLevel();
                     }
                 }
             } catch (Exception e) {
@@ -61,38 +63,67 @@
 
 <% if (sessionUsername != null) { %>
 <p>Welcome, <%= sessionUsername %>!</p>
-<a href="user-servlet?action=logout">Logout</a>
 <% } else { %>
 <a href="login.jsp">Login</a><br>
 <a href="register.jsp">Register</a><br>
 <% } %>
 
 
+<% if (permissionLevel == PermissionLevel.Admin) { %>
+
+<a href="admin.jsp">Manage Users</a><br>
+<% } else if (permissionLevel == PermissionLevel.Worker) { %>
+
+<a href="warehouse.jsp">Warehouse</a><br>
+<% } %>
+
+<% if (permissionLevel == PermissionLevel.Customer) { %>
 <%
     List<String> cart = (List<String>) session.getAttribute("cart");
     if (cart != null) {
         amountInShoppingCart = cart.size();
     }
 %>
-
 <a href="shoppingCart.jsp">Kundvagn (<%= amountInShoppingCart %>)</a><br>
+<% } %>
 
-
+<hr>
 
 <%
     Collection<ItemInfo> items = ItemHandler.getAllItems();
     Iterator<ItemInfo> it = items.iterator();
-    while (it.hasNext()) {
-        ItemInfo item = it.next();
 %>
-<%= item.getName() %>( <%= item.getAmount() %>)
-<form method="post" action="${pageContext.request.contextPath}/items" style="display: inline;">
-    <input type="hidden" name="itemId" value="<%=item.getId()%>">
-    <button type="submit">add to cart</button>
+<table>
+    <tr>
+        <th>Item</th>
+        <th>Stock</th>
+    </tr>
+    <%
+        while (it.hasNext()) {
+            ItemInfo item = it.next();
+    %>
+    <tr>
+        <td><%= item.getName() %></td>
+        <td><%= item.getAmount() %></td>
+        <% if (sessionUsername != null && permissionLevel == PermissionLevel.Customer) { %>
+        <td>
 
-</form><br>
+            <form method="post" action="${pageContext.request.contextPath}/items" style="display: inline;">
+                <input type="hidden" name="itemId" value="<%= item.getId() %>">
+                <button type="submit">Add to cart</button>
+            </form>
+        </td>
+        <% } %>
+    </tr>
+    <%
+        }
+    %>
+</table>
+
+<% if (sessionUsername != null) { %>
+<br>
+<a href="user-servlet?action=logout">Logout</a>
 <% } %>
 
-<a href="login.jsp">login</a><br>
 </body>
 </html>

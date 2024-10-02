@@ -94,4 +94,34 @@ public class ItemDB {
         }
         return item;
     }
+
+    public static void updateStock(int itemId, int newStock) throws SQLException {
+        String query = "UPDATE products SET stock = ? WHERE id = ?";
+        try (Connection con = DBManager.getConnection();
+             PreparedStatement ps = con.prepareStatement(query)) {
+
+            ps.setInt(1, newStock);
+            ps.setInt(2, itemId);
+            ps.executeUpdate();
+        }
+    }
+
+    public static void addItem(String name, String description, double price, int stock) throws SQLException {
+        String query = "INSERT INTO products (name, description, price, stock) VALUES (?, ?, ?, ?)";
+
+        try (Connection con = DBManager.getConnection();
+             PreparedStatement ps = con.prepareStatement(query)) {
+
+            // Ställ in parametrarna för INSERT
+            ps.setString(1, name);
+            ps.setString(2, description);
+            ps.setDouble(3, price);
+            ps.setInt(4, stock);
+
+            ps.executeUpdate();
+        }
+    }
+
+
+
 }

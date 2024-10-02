@@ -60,4 +60,34 @@ public class UserDB {
 
         return result;
     }
+
+    public static boolean updateUserRole(Connection connection, String username, PermissionLevel newPermissionLevel) throws SQLException {
+        String query = "UPDATE users SET permissionlevel = ? WHERE username = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setString(1, newPermissionLevel.toString());
+            stmt.setString(2, username);
+            int affectedRows = stmt.executeUpdate();
+            return affectedRows > 0;
+        }
+    }
+    public static User findUserByUsername(Connection connection, String username) throws SQLException {
+        User foundUser = null;
+
+        String query = "SELECT id, username, permissionlevel FROM users WHERE username = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setString(1, username);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                int userId = rs.getInt("id");
+                String foundUsername = rs.getString("username");
+                PermissionLevel permissionLevel = PermissionLevel.valueOf(rs.getString("permissionlevel"));
+
+                foundUser = new User(userId, foundUsername, permissionLevel);
+            }
+        }
+
+        return foundUser;
+    }
+
 }
