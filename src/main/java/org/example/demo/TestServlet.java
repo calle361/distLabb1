@@ -21,7 +21,7 @@ public class TestServlet extends HttpServlet {
     }
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         // Get the itemId from the form (this comes from the hidden input field)
-        String itemId = request.getParameter("itemId");
+        int itemId = Integer.parseInt(request.getParameter("itemId"));
 
         // Print the itemId to the console (for debugging purposes)
         System.out.println("Item ID: " + itemId);
@@ -31,7 +31,7 @@ public class TestServlet extends HttpServlet {
 
         // Get or create the shopping cart (stored in the session)
         HttpSession session = request.getSession();
-        List<String> cart = (List<String>) session.getAttribute("cart");
+        List<Integer> cart = (List<Integer>) session.getAttribute("cart");
         if (cart == null) {
             cart = new ArrayList<>();
             session.setAttribute("cart", cart);

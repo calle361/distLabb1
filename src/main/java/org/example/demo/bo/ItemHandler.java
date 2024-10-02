@@ -25,4 +25,9 @@ public class ItemHandler {
 
         return items;
     }
+    public static ItemInfo getItemById(int id) {
+        Item itemFromDb=Item.getItem(id);
+        ItemInfo itemInfo=new ItemInfo(itemFromDb.getId(), itemFromDb.getName(), itemFromDb.getDescription(), itemFromDb.getPrice(), itemFromDb.getAmount());
+        return itemInfo;
+    }
 }
