@@ -6,6 +6,7 @@
 <%@ page import="org.example.demo.ui.ItemInfo" %>
 <%@ page import="org.example.demo.bo.ItemHandler" %>
 <%@ page import="java.util.Iterator" %>
+<%@ page import="java.util.List" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html>
@@ -66,13 +67,17 @@
 <a href="register.jsp">Register</a><br>
 <% } %>
 
-<a href="shoppingCart.jsp">Kundvagn (<%= amountInShoppingCart %>)</a>
-<ul>
-    <li>äpple <button>köp</button></li>
-    <li>annanas <button>köp</button></li>
-    <li>apelsin <button>köp</button></li>
-    <li>mango <button>köp</button></li>
-</ul>
+
+<%
+    List<String> cart = (List<String>) session.getAttribute("cart");
+    if (cart != null) {
+        amountInShoppingCart = cart.size();
+    }
+%>
+
+<a href="shoppingCart.jsp">Kundvagn (<%= amountInShoppingCart %>)</a><br>
+
+
 
 <%
     Collection<ItemInfo> items = ItemHandler.getAllItems();
@@ -80,8 +85,14 @@
     while (it.hasNext()) {
         ItemInfo item = it.next();
 %>
-<%= item.getName() %>: <%= item.getAmount() %><br>
+<%= item.getName() %>( <%= item.getAmount() %>)
+<form method="post" action="${pageContext.request.contextPath}/items" style="display: inline;">
+    <input type="hidden" name="itemId" value="<%=item.getId()%>">
+    <button type="submit">add to cart</button>
+
+</form><br>
 <% } %>
 
+<a href="login.jsp">login</a><br>
 </body>
 </html>
