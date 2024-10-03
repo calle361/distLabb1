@@ -1,11 +1,12 @@
 <%@ page import="org.example.demo.bo.Item" %>
-<%@ page import="org.example.demo.db.ItemDB" %>
+<%@ page import="org.example.demo.bo.ItemHandler" %>
 <%@ page import="java.util.Collection" %>
+<%@ page import="org.example.demo.ui.ItemInfo" %>
 
 <h1>Warehouse</h1>
 
 <%
-  Collection<Item> items = ItemDB.getItems();
+  Collection<ItemInfo> items = ItemHandler.getAllItems();
 %>
 
 
@@ -16,7 +17,7 @@
     <th>Update Stock</th>
   </tr>
 
-  <% for (Item item : items) { %>
+  <% for (ItemInfo item : items) { %>
   <tr>
     <td><%= item.getName() %></td>
     <td><%= item.getAmount() %></td>

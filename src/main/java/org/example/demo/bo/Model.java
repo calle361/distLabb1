@@ -80,8 +80,5 @@ public class Model {
     public static DBManager getDBManager() {
         return dbManager;
     }
-    public static Connection getConnection() {
-        return
-    }
 }
 

@@ -24,7 +24,7 @@ public class OrderHandler {
 
                 if (stock > 0) {
                     // Reduce the stock for this item
-                    ItemHandler.updateStock( itemId, stock - 1);
+                    ItemHandler.updateStock2(conn, itemId, stock - 1);
                     System.out.println("Stock updated for item ID: " + itemId);
                 } else {
 

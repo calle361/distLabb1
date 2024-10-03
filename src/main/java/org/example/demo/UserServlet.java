@@ -35,7 +35,8 @@ public class UserServlet extends HttpServlet {
 
     }
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String action = request.getParameter("action    ");
+        String action = request.getParameter("action");
+
         if (action == null) {
             action = "login";  // Default action
         }
@@ -56,7 +57,6 @@ public class UserServlet extends HttpServlet {
             case "addItem":
                 handleAddItem(request, response);
                 break;
-
             case "updateStock":
                 handleUpdateStock(request, response);  // Ny action för att hantera lageruppdatering
                 break;
