@@ -11,10 +11,11 @@ import java.util.Collection;
 import java.util.List;
 
 public class ItemHandler {
-    static DBManager dbManager = Model.getDBManager();
+    //static DBManager dbManager = Model.getDBManager();
+    static Connection conn=Model.getConnection();
     public static Collection<ItemInfo> getAllItems() throws SQLException {
         // Use generics to specify type safety
-        Collection<Item> itemsFromDb = ItemDB.getItems(dbManager.getConnection());
+        Collection<Item> itemsFromDb = ItemDB.getItems(conn);
         List<ItemInfo> items = new ArrayList<>();
 
         // Use enhanced for-loop for better readability
@@ -31,26 +32,26 @@ public class ItemHandler {
         return items;
     }
     public static ItemInfo getItemById(int id) throws SQLException {
-        Item itemFromDb=ItemDB.getItem(dbManager.getConnection(),id);
+        Item itemFromDb=ItemDB.getItem(conn,id);
         ItemInfo itemInfo=new ItemInfo(itemFromDb.getId(), itemFromDb.getName(), itemFromDb.getDescription(), itemFromDb.getPrice(), itemFromDb.getAmount());
         return itemInfo;
     }
     public static int getstockById(int id) throws SQLException {
-        Item itemFromDb=ItemDB.getItem(dbManager.getConnection(),id);
+        Item itemFromDb=ItemDB.getItem(conn,id);
         int stock=itemFromDb.getAmount();
         return stock;
 
     }
     // Add a new item to the inventory
     public static void addItem(String name, String description, double price, int stock) throws SQLException {
-        try (var connection = dbManager.getConnection()) {
+        try (var connection = conn) {
             ItemDB.addItem(connection, name, description, price, stock);
         }
     }
 
     // Update the stock of an existing item
     public static void updateStock(int itemId, int newStock) throws SQLException {
-            try (var connection2 =dbManager.getConnection()) {
+            try (var connection2 =conn) {
                 ItemDB.updateStock(connection2, itemId, newStock);
             }
     }

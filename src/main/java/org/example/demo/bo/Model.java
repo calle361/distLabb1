@@ -13,13 +13,15 @@ import java.sql.SQLException;
  */
 public class Model {
 
-    static DBManager dbManager;
+    //static DBManager dbManager;
+    private static Connection conn;
 
     // Initiera databasen vid uppstart
     public static boolean initialize() {
-        dbManager = new DBManager();
+        //dbManager = new DBManager();
         try {
-            return dbManager.connect(DBManager.getDefaultDatabase());
+            conn = DBManager.getConnection();
+            return conn!=null;
         } catch (SQLException e) {
             System.err.println("Kunde inte ansluta till databasen: " + e.getMessage());
             return false;
@@ -29,7 +31,10 @@ public class Model {
     // Stäng anslutningen till databasen vid nedstängning
     public static void shutdown() {
         try {
-            dbManager.disconnect();
+            if (conn != null&&!conn.isClosed()) {
+                conn.close();
+            }
+
         } catch (SQLException e) {
             System.err.println("Kunde inte stänga anslutningen: " + e.getMessage());
         }
@@ -38,7 +43,7 @@ public class Model {
     // Logga in en användare med username och password
     public static User loginUser(String username, String password) {
         User user = null;
-        try (Connection connection = dbManager.getConnection()) {
+        try (Connection connection = conn) {
             user = UserDB.login(connection, username, password);
         } catch (SQLException e) {
             System.err.println("Login fel: " + e.getMessage());
@@ -49,7 +54,7 @@ public class Model {
     // Registrera en ny användare
     public static User registerUser(String username, String password, PermissionLevel permissionLevel) {
         User user = null;
-        try (Connection connection = dbManager.getConnection()) {
+        try (Connection connection = conn) {
             user = UserDB.register(connection, username, password, permissionLevel);
         } catch (SQLException e) {
             System.err.println("Registreringsfel: " + e.getMessage());
@@ -77,11 +82,9 @@ public class Model {
         return isUpdated;
     }
 
-    public static DBManager getDBManager() {
-        return dbManager;
-    }
     public static Connection getConnection() {
-        return
+        return conn;
     }
+
 }
 

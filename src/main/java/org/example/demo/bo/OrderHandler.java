@@ -8,12 +8,12 @@ import java.sql.SQLException;
 import java.util.List;
 
 public class OrderHandler {
-    static DBManager dbManager = Model.getDBManager();
+    //static DBManager dbManager = Model.getDBManager();
+    static Connection conn=Model.getConnection();
     public static boolean handleTransaktion(List<Integer> ids){
-        Connection conn = null;
+
         try {
-            // Step 1: Get the connection
-            conn = dbManager.getConnection();
+
             // Step 2: Disable auto-commit for transaction handling
             conn.setAutoCommit(false);
 
@@ -24,7 +24,7 @@ public class OrderHandler {
 
                 if (stock > 0) {
                     // Reduce the stock for this item
-                    ItemHandler.updateStock( itemId, stock - 1);
+                    ItemHandler.updateStock(itemId, stock - 1);
                     System.out.println("Stock updated for item ID: " + itemId);
                 } else {
 
