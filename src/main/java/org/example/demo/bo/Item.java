@@ -21,7 +21,7 @@ public class Item {
         this.price = price;
         this.amount = amount;
     }
-
+/*
     // Static method to get all items from the database
     public static Collection<Item> getItems() {
         Collection<Item> items = new ArrayList<>();
@@ -34,16 +34,21 @@ public class Item {
         return items;  // Return an empty collection or partial results in case of an error
     }
 
+ */
+
+    /*
     public static Item getItem(int id) {
         Item item = null;
         try{
-            item=ItemDB.getItem(id);
+            item=ItemDB.getItem(,id);
         } catch (SQLException e) {
             e.printStackTrace();  // Print the stack trace or log it
             // You can also handle the error gracefully here
         }
         return item;
     }
+
+     */
 
     // Getters and setters for the fields
     public String getName() {

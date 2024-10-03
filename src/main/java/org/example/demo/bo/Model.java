@@ -13,7 +13,7 @@ import java.sql.SQLException;
  */
 public class Model {
 
-    private static DBManager dbManager;
+    static DBManager dbManager;
 
     // Initiera databasen vid uppstart
     public static boolean initialize() {
@@ -75,6 +75,13 @@ public class Model {
             System.err.println("Error updating user role: " + e.getMessage());
         }
         return isUpdated;
+    }
+
+    public static DBManager getDBManager() {
+        return dbManager;
+    }
+    public static Connection getConnection() {
+        return
     }
 }
 

@@ -10,14 +10,14 @@ import java.util.List;
 public class ItemDB {
 
     // Method to retrieve all items from the database
-    public static Collection<Item> getItems() throws SQLException {
+    public static Collection<Item> getItems(Connection connection) throws SQLException {
         List<Item> items = new ArrayList<>();
         Connection con = null;
         Statement st = null;
         ResultSet rs = null;
 
         try {
-            con = DBManager.getConnection();  // Ensure DBManager.getConnection() is working and doesn't return null
+            con = connection;  // Ensure DBManager.getConnection() is working and doesn't return null
             if (con == null) {
                 throw new SQLException("Unable to establish a database connection.");
             }
@@ -50,7 +50,7 @@ public class ItemDB {
         return items;
     }
 
-    public static Item getItem(int idToSearch) throws SQLException {
+    public static Item getItem(Connection connection,int idToSearch) throws SQLException {
         Item item = null;
         Connection con = null;
         PreparedStatement ps = null;
@@ -58,7 +58,7 @@ public class ItemDB {
         ResultSet rs = null;
 
         try {
-            con = DBManager.getConnection();  // Ensure DBManager.getConnection() is working and doesn't return null
+            con = connection;  // Ensure DBManager.getConnection() is working and doesn't return null
             if (con == null) {
                 throw new SQLException("Unable to establish a database connection.");
             }
@@ -110,7 +110,7 @@ public class ItemDB {
     public static void addItem(Connection connection, String name, String description, double price, int stock) throws SQLException {
         String query = "INSERT INTO products (name, description, price, stock) VALUES (?, ?, ?, ?)";
 
-        try (Connection con = DBManager.getConnection();
+        try (Connection con = connection;
              PreparedStatement ps = con.prepareStatement(query)) {
 
             // Ställ in parametrarna för INSERT
