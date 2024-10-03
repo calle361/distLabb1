@@ -94,154 +94,134 @@ public class UserServlet extends HttpServlet {
         String password = request.getParameter("password");
         String rememberMe = request.getParameter("rememberMe");
 
-        try (Connection connection = DBManager.getConnection()) {
-            if (connection != null) {
-                User user = UserDB.login(connection, username, password);
-                if (user != null) {
-                    HttpSession session = request.getSession();
-                    session.setAttribute("username", username);
-                    session.setAttribute("permissionLevel", user.getPermissionLevel());  // Spara behörighetsnivån i sessionen
+        // Använd Model för att hantera inloggning
+        User user = Model.loginUser(username, password);
 
-                    System.out.println("User logged in with permission level: " + user.getPermissionLevel());  // Logga behörigheten
+        if (user != null) {
+            HttpSession session = request.getSession();
+            session.setAttribute("username", username);
+            session.setAttribute("permissionLevel", user.getPermissionLevel());  // Spara behörighetsnivån i sessionen
 
+            System.out.println("User logged in with permission level: " + user.getPermissionLevel());  // Logga behörigheten
 
-                    // Skapa en cookie om "remember me" är markerat
-                    if ("on".equals(rememberMe)) {
-                        Cookie usernameCookie = new Cookie("username", username);
-                        usernameCookie.setMaxAge(60 * 60 * 24 * 7);  // Sätt cookie-livslängd till 7 dagar
-                        response.addCookie(usernameCookie);
+            // Hantera 'remember me' - cookie
+            if ("on".equals(rememberMe)) {
+                Cookie usernameCookie = new Cookie("username", username);
+                usernameCookie.setMaxAge(60 * 60 * 24 * 7);  // Sätt cookie-livslängd till 7 dagar
+                response.addCookie(usernameCookie);
 
-                        Cookie passwordCookie = new Cookie("password", password);
-                        passwordCookie.setMaxAge(60 * 60 * 24 * 7);  // Sätt cookie-livslängd till 7 dagar
-                        response.addCookie(passwordCookie);
-                    }
-
-                    response.sendRedirect("index.jsp");
-                } else {
-                    response.getWriter().println("Login failed! Please try again.");
-                }
-            } else {
-                response.getWriter().println("Database connection failed.");
+                Cookie passwordCookie = new Cookie("password", password);
+                passwordCookie.setMaxAge(60 * 60 * 24 * 7);  // Sätt cookie-livslängd till 7 dagar
+                response.addCookie(passwordCookie);
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            response.getWriter().println("Error: " + e.getMessage());
+
+            response.sendRedirect("index.jsp");
+        } else {
+            response.getWriter().println("Login failed! Please try again.");
         }
     }
+
 
 
     private void handleRegister(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
 
-        try (Connection connection = DBManager.getConnection()) {
-            if (connection != null) {
-                PermissionLevel permissionLevel = PermissionLevel.Customer;  // Sätt en standardbehörighet
-                User user = UserDB.register(connection, username, password, permissionLevel);
+        // Sätt en standardbehörighet (Customer)
+        PermissionLevel permissionLevel = PermissionLevel.Customer;
 
-                if (user != null) {
-                    response.sendRedirect("login.jsp");  // Skicka till login-sidan efter registrering
-                } else {
-                    response.getWriter().println("Registration failed.");
-                }
-            } else {
-                response.getWriter().println("Database connection failed.");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            response.getWriter().println("Error: " + e.getMessage());
+        // Använd Model för att hantera registrering
+        User user = Model.registerUser(username, password, permissionLevel);
+
+        if (user != null) {
+            response.sendRedirect("login.jsp");  // Skicka till login-sidan efter registrering
+        } else {
+            response.getWriter().println("Registration failed.");
         }
     }
+
 
 
     private void handleUpdateRole(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String username = request.getParameter("username");
         String newRole = request.getParameter("role");
 
-        try (Connection connection = DBManager.getConnection()) {
-            if (connection != null) {
-                PermissionLevel newPermissionLevel = PermissionLevel.valueOf(newRole);
-                boolean updated = UserDB.updateUserRole(connection, username, newPermissionLevel);
+        // Konvertera strängen "role" till PermissionLevel
+        PermissionLevel newPermissionLevel = PermissionLevel.valueOf(newRole);
 
-                if (updated) {
-                    request.setAttribute("message", "User role updated successfully.");
-                } else {
-                    request.setAttribute("message", "Failed to update user role.");
-                }
-            } else {
-                request.setAttribute("message", "Database connection failed.");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            request.setAttribute("message", "Error: " + e.getMessage());
+        // Använd Model för att uppdatera användarroll
+        boolean updated = Model.updateUserRole(username, newPermissionLevel);
+
+        if (updated) {
+            request.setAttribute("message", "User role updated successfully.");
+        } else {
+            request.setAttribute("message", "Failed to update user role.");
         }
 
+        // Ladda om samma sida (admin.jsp)
         request.getRequestDispatcher("admin.jsp").forward(request, response);
     }
 
 
-    private void handleSearchUser(HttpServletRequest request, HttpServletResponse response) throws IOException {
+
+    private void handleSearchUser(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         String searchUsername = request.getParameter("searchUsername");
 
-        try (Connection connection = DBManager.getConnection()) {
-            if (connection != null) {
-                User foundUser = UserDB.findUserByUsername(connection, searchUsername);
+        // Använd Model för att hitta användaren
+        User foundUser = Model.findUserByUsername(searchUsername);
 
-                if (foundUser != null) {
-                    request.setAttribute("foundUser", foundUser);  // Spara den hittade användaren i request-attribut
-                } else {
-                    request.setAttribute("message", "No user found with username: " + searchUsername);  // Skicka ett felmeddelande om användaren inte hittas
-                }
-
-                request.getRequestDispatcher("admin.jsp").forward(request, response);
-            } else {
-                response.getWriter().println("Database connection failed.");
-            }
-        } catch (SQLException | ServletException e) {
-            e.printStackTrace();
-            response.getWriter().println("Error: " + e.getMessage());
+        if (foundUser != null) {
+            request.setAttribute("foundUser", foundUser);  // Spara den hittade användaren i request-attribut
+        } else {
+            request.setAttribute("message", "No user found with username: " + searchUsername);  // Skicka ett felmeddelande om användaren inte hittas
         }
+
+        // Vid fel eller framgång, ladda om samma sida (admin.jsp)
+        request.getRequestDispatcher("admin.jsp").forward(request, response);
     }
 
 
 
-    // Hantering av lageruppdatering
-    private void handleUpdateStock(HttpServletRequest request, HttpServletResponse response) throws IOException {
+
+    private void handleUpdateStock(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         int itemId = Integer.parseInt(request.getParameter("id"));
         int newStock = Integer.parseInt(request.getParameter("newStock"));
 
-        try (Connection connection = DBManager.getConnection()) {
-            if (connection != null) {
-                ItemDB.updateStock(itemId, newStock);
-                response.getWriter().println("Stock updated successfully.");
-                response.sendRedirect("warehouse.jsp");
-            } else {
-                response.getWriter().println("Database connection failed.");
-            }
+        try {
+            // Använd business-lagret (ItemHandler) för att uppdatera lagerstatus
+            ItemHandler.updateStock(itemId, newStock);
+
+            // Logga för felsökning (valfritt)
+            System.out.println("Stock for item " + itemId + " updated to " + newStock);
+
+            // Omdirigera till warehouse.jsp för att ladda om sidan med uppdaterade data
+            response.sendRedirect("warehouse.jsp");
         } catch (SQLException e) {
             e.printStackTrace();
-            response.getWriter().println("Error: " + e.getMessage());
+            request.setAttribute("message", "Error updating stock: " + e.getMessage());
+
+            // Vid fel, ladda om sidan med felmeddelande
+            request.getRequestDispatcher("warehouse.jsp").forward(request, response);
         }
     }
-    private void handleAddItem(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
+
+    // Lägg till ny produkt
+    private void handleAddItem(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         String name = request.getParameter("name");
         String description = request.getParameter("description");
-        String priceStr = request.getParameter("price");
-        String stockStr = request.getParameter("stock");
+        double price = Double.parseDouble(request.getParameter("price"));
+        int stock = Integer.parseInt(request.getParameter("stock"));
 
         try {
-
-            double price = Double.parseDouble(priceStr);
-            int stock = Integer.parseInt(stockStr);
-
-            ItemDB.addItem(name, description, price, stock);
-
-            response.sendRedirect("warehouse.jsp");
-        } catch (SQLException | NumberFormatException e) {
+            ItemHandler.addItem(name, description, price, stock);  // Använd business-lagret
+            request.setAttribute("message", "Item added successfully.");
+        } catch (SQLException e) {
             e.printStackTrace();
-            response.getWriter().println("Error: " + e.getMessage());
+            request.setAttribute("message", "Error adding item: " + e.getMessage());
         }
+
+        request.getRequestDispatcher("warehouse.jsp").forward(request, response);  // Ladda om sidan utan omdirigering
     }
 
 

@@ -57,6 +57,24 @@ public class Model {
         return user;
     }
 
-    // Här kan du lägga till fler metoder för andra funktioner som att hantera användare, produkter och ordrar.
+    public static User findUserByUsername(String username) {
+        User foundUser = null;
+        try (Connection connection = DBManager.getConnection()) {
+            foundUser = UserDB.findUserByUsername(connection, username);
+        } catch (SQLException e) {
+            System.err.println("Error searching for user: " + e.getMessage());
+        }
+        return foundUser;
+    }
+
+    public static boolean updateUserRole(String username, PermissionLevel newPermissionLevel) {
+        boolean isUpdated = false;
+        try (Connection connection = DBManager.getConnection()) {
+            isUpdated = UserDB.updateUserRole(connection, username, newPermissionLevel);
+        } catch (SQLException e) {
+            System.err.println("Error updating user role: " + e.getMessage());
+        }
+        return isUpdated;
+    }
 }
 

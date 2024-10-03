@@ -95,18 +95,19 @@ public class ItemDB {
         return item;
     }
 
-    public static void updateStock(int itemId, int newStock) throws SQLException {
+    public static void updateStock(Connection connection, int itemId, int newStock) throws SQLException {
         String query = "UPDATE products SET stock = ? WHERE id = ?";
-        try (Connection con = DBManager.getConnection();
-             PreparedStatement ps = con.prepareStatement(query)) {
-
+        try (PreparedStatement ps = connection.prepareStatement(query)) {
             ps.setInt(1, newStock);
             ps.setInt(2, itemId);
-            ps.executeUpdate();
+            int rowsUpdated = ps.executeUpdate();
+            System.out.println("Rows updated: " + rowsUpdated);  // Kontrollera att uppdatering sker
         }
     }
 
-    public static void addItem(String name, String description, double price, int stock) throws SQLException {
+
+
+    public static void addItem(Connection connection, String name, String description, double price, int stock) throws SQLException {
         String query = "INSERT INTO products (name, description, price, stock) VALUES (?, ?, ?, ?)";
 
         try (Connection con = DBManager.getConnection();
