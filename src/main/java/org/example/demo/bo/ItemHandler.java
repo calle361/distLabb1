@@ -33,6 +33,12 @@ public class ItemHandler {
         ItemInfo itemInfo=new ItemInfo(itemFromDb.getId(), itemFromDb.getName(), itemFromDb.getDescription(), itemFromDb.getPrice(), itemFromDb.getAmount());
         return itemInfo;
     }
+    public static int getstockById(int id) {
+        Item itemFromDb=Item.getItem(id);
+        int stock=itemFromDb.getAmount();
+        return stock;
+
+    }
     // Add a new item to the inventory
     public static void addItem(String name, String description, double price, int stock) throws SQLException {
         try (var connection = DBManager.getConnection()) {

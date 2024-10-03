@@ -13,11 +13,10 @@
 <h2>Items in Cart:</h2>
 <ul>
     <%
-        // Fetch cart items from session (this assumes "cart" is stored in session)
-        //HttpSession session = request.getSession();
+        // Fetch cart items from session
         List<Integer> cart = (List<Integer>) session.getAttribute("cart");
 
-        // Ensure cart is not null
+        // Ensure cart is not null and contains items
         if (cart != null && !cart.isEmpty()) {
             for (int itemId : cart) {
                 // Fetch item details based on itemId
@@ -28,13 +27,28 @@
     <%
             }
         }
-    } else {
-    %>
-    <li>No items in your shopping cart.</li>
-    <%
-        }
     %>
 </ul>
 
+<!-- Form to send itemIds to a POST request -->
+<form action="<%= request.getContextPath() %>/checkout" method="post">
+    <%
+        // Include each itemId in a hidden input field
+        for (int itemId : cart) {
+    %>
+    <input type="hidden" name="itemIds" value="<%= itemId %>">
+    <%
+        }
+    %>
+    <button type="submit">Proceed to Checkout</button>
+</form>
+
+<%
+} else {  // This 'else' is tied to the 'if (cart != null && !cart.isEmpty())' condition above
+%>
+<li>No items in your shopping cart.</li>
+<%
+    }  // Closing the 'if-else' block
+%>
 </body>
 </html>

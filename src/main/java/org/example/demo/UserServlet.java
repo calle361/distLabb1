@@ -35,7 +35,7 @@ public class UserServlet extends HttpServlet {
 
     }
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String action = request.getParameter("action");
+        String action = request.getParameter("action    ");
         if (action == null) {
             action = "login";  // Default action
         }
