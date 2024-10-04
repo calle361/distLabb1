@@ -4,7 +4,9 @@
 <%@ page import="java.util.Collection" %>
 <%@ page import="java.util.List" %>
 
-<h1>Warehouse</h1>
+<h1 style="display: inline-block;">Warehouse</h1>
+<a href="index.jsp" style="display: inline-block; margin-left: 20px;">Home page</a>
+
 
 <%
   // Hämta alla varor och kategorier från ItemHandler

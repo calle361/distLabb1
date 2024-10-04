@@ -7,6 +7,7 @@ import org.example.demo.db.UserDB;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class OrderHandler {
@@ -23,11 +24,13 @@ public class OrderHandler {
             // Step 2: Disable auto-commit for transaction handling
             conn.setAutoCommit(false);
             int totPrice=0;
+            List<String> itemNames = new ArrayList<>();
             // Step 3: Check stock for each item and reduce stock if available
             for (int itemId : ids) {
                 // Check stock using ItemHandler (which internally uses ItemDB)
                 int stock = ItemHandler.getstockById(itemId);
                 totPrice+=ItemHandler.getPriceById(itemId);
+                itemNames.add(ItemDB.getItemName(conn,itemId));
                 if (stock > 0) {
                     // Reduce the stock for this item
                     System.out.println("wow nu ska vi bli av med ID:"+itemId);
@@ -42,7 +45,7 @@ public class OrderHandler {
             // Step 4: If all stock updates succeed, create an order
             int userId = UserDB.getUserIdByUsername(dbManager.getConnection(),username); // Assuming userId is stored in session
             int orderId=OrderDB.createOrder(dbManager.getConnection(),userId, totPrice);  // Create the order
-            OrderDB.createOrderItems(dbManager.getConnection(),orderId,ids);
+            OrderDB.createOrderItems(dbManager.getConnection(),orderId,ids,itemNames);
             // Step 5: Commit the transaction
             conn.commit();
             successFlag = true;
@@ -72,6 +75,16 @@ public class OrderHandler {
 
 
         return successFlag;
+    }
+    public static List<Order> getAllOrders(String username) throws SQLException {
+        Connection conn = dbManager.getConnection();
+        List<Order> orders = OrderDB.getAllOrders(conn);
+        //ksk lägg till att de görs om till facade.
+        return orders;
+    }
+    public static List<OrderItem> getOrderItems(int orderId) throws SQLException {
+        Connection conn = dbManager.getConnection();
+        return OrderDB.getOrderItemsByOrderId(conn, orderId);
     }
 
     public OrderHandler() throws SQLException {

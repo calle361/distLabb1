@@ -124,7 +124,9 @@
 
 <% if (sessionUsername != null) { %>
 <br>
-<a href="user-servlet?action=logout">Logout</a>
+<a href="user-servlet?action=logout">Logout</a><br>
+
+<a href="${pageContext.request.contextPath}/order">pack orders</a>
 <% } %>
 
 </body>

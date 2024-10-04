@@ -7,7 +7,8 @@
     String searchPerformed = request.getParameter("searchPerformed"); // Kontrollera om en sökning har genomförts
 %>
 
-<h1>Manage User Roles</h1>
+<h1 style="display: inline-block;">Manage Users</h1>
+<a href="index.jsp" style="display: inline-block; margin-left: 20px;">Home page</a>
 
 <% if (message != null) { %>
 <p class="message"><%= message %></p>

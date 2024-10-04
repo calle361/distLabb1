@@ -13,20 +13,25 @@ import java.util.List;
 
 public class ItemHandler {
     static DBManager dbManager = Model.getDBManager();
+    //static Connection conn=Model.getConnection();
 
-    // Hämta alla produkter med deras kategorier
+
+
     public static Collection<ItemInfo> getAllItems() throws SQLException {
+        // Use generics to specify type safety
         Connection conn = dbManager.getConnection();
+
         Collection<Item> itemsFromDb = ItemDB.getItems(conn);
         List<ItemInfo> items = new ArrayList<>();
 
+        // Use enhanced for-loop for better readability
         for (Item item : itemsFromDb) {
             // Hämta kategori för varje produkt
             Category category = CategoryDB.getCategoryById(conn, item.getCategoryId());
             items.add(new ItemInfo(
                     item.getId(),
                     item.getName(),
-                    item.getDescription(),
+                    item.getDescription(),  // Corrected to method call
                     item.getPrice(),
                     item.getAmount(),
                     category  // Lägg till kategori i ItemInfo
@@ -35,39 +40,35 @@ public class ItemHandler {
 
         return items;
     }
-
-    // Hämta en produkt med dess kategori
     public static ItemInfo getItemById(int id) throws SQLException {
         Item itemFromDb = ItemDB.getItem(dbManager.getConnection(), id);
         Category category = CategoryDB.getCategoryById(dbManager.getConnection(), itemFromDb.getCategoryId());
 
         return new ItemInfo(itemFromDb.getId(), itemFromDb.getName(), itemFromDb.getDescription(), itemFromDb.getPrice(), itemFromDb.getAmount(), category);
     }
-
-    // Hämta lagret för en produkt baserat på ID
     public static int getstockById(int id) throws SQLException {
-        Item itemFromDb = ItemDB.getItem(dbManager.getConnection(), id);
-        return itemFromDb.getAmount();
-    }
+        Item itemFromDb=ItemDB.getItem(dbManager.getConnection(),id);
+        int stock=itemFromDb.getAmount();
+        return stock;
 
-    // Hämta priset för en produkt baserat på ID
+    }
     public static int getPriceById(int id) throws SQLException {
-        Item itemFromDb = ItemDB.getItem(dbManager.getConnection(), id);
-        return itemFromDb.getPrice();
+        Item itemFromDb=ItemDB.getItem(dbManager.getConnection(),id);
+        int price=itemFromDb.getPrice();
+        return price;
     }
-
-    // Lägg till en ny produkt med kategori
+    // Add a new item to the inventory
     public static void addItem(String name, String description, double price, int stock, int categoryId) throws SQLException {
         try (var connection = dbManager.getConnection()) {
             ItemDB.addItem(connection, name, description, price, stock, categoryId);
         }
     }
 
-    // Uppdatera lagret för en befintlig produkt
+    // Update the stock of an existing item
     public static void updateStock(int itemId, int newStock) throws SQLException {
-        try (var connection2 = dbManager.getConnection()) {
-            ItemDB.updateStock(connection2, itemId, newStock);
-        }
+            try (var connection2 =dbManager.getConnection()) {
+                ItemDB.updateStock(connection2, itemId, newStock);
+            }
     }
 
     // Uppdatera lagret för en befintlig produkt (används internt)
