@@ -97,4 +97,17 @@ public class OrderDB {
         }
         return orderItems;
     }
+    public static boolean removeOrder(Connection connection, int orderId) throws SQLException {    String query = "DELETE FROM orders WHERE order_id = ?";
+        try (PreparedStatement ps = connection.prepareStatement(query)) {
+            ps.setInt(1, orderId);
+            int rowsAffected = ps.executeUpdate();  // Number of rows deleted
+
+            // Check if any rows were affected (i.e., if the order existed and was deleted)
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            // Log the exception for debugging purposes
+            e.printStackTrace();
+            return false;
+        }
+    }
 }

@@ -37,7 +37,14 @@ public class OrderItemsServlet extends HttpServlet {
 
     }
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-
+        String orderIdStr = request.getParameter("orderId");
+        int orderId = Integer.parseInt(orderIdStr);
+        try {
+            OrderHandler.removeOrder(orderId);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        response.sendRedirect(request.getContextPath() + "/index.jsp");
 
     }
     public void destroy() {

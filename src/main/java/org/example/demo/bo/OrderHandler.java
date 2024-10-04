@@ -86,6 +86,10 @@ public class OrderHandler {
         Connection conn = dbManager.getConnection();
         return OrderDB.getOrderItemsByOrderId(conn, orderId);
     }
+    public static void removeOrder(int orderId) throws SQLException {
+        Connection conn = dbManager.getConnection();
+        boolean successFlag = OrderDB.removeOrder(conn, orderId);
+    }
 
     public OrderHandler() throws SQLException {
     }
