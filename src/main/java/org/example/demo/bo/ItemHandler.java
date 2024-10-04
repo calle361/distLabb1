@@ -47,6 +47,11 @@ public class ItemHandler {
         return stock;
 
     }
+    public static int getPriceById(int id) throws SQLException {
+        Item itemFromDb=ItemDB.getItem(dbManager.getConnection(),id);
+        int price=itemFromDb.getPrice();
+        return price;
+    }
     // Add a new item to the inventory
     public static void addItem(String name, String description, double price, int stock) throws SQLException {
         try (var connection = dbManager.getConnection()) {

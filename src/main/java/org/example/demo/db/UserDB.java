@@ -89,5 +89,9 @@ public class UserDB {
 
         return foundUser;
     }
+    public static int getUserIdByUsername(Connection connection, String username) throws SQLException {
+        User user = findUserByUsername(connection, username);
+        return user.getUid();
+    }
 
 }

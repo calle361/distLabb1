@@ -2,6 +2,8 @@ package org.example.demo.bo;
 
 import org.example.demo.db.DBManager;
 import org.example.demo.db.ItemDB;
+import org.example.demo.db.OrderDB;
+import org.example.demo.db.UserDB;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -9,7 +11,9 @@ import java.util.List;
 
 public class OrderHandler {
     static DBManager dbManager = Model.getDBManager();
-    public static boolean handleTransaktion(List<Integer> ids){
+
+
+    public static boolean handleTransaktion(List<Integer> ids,String username){
         Connection conn = null;
         Boolean successFlag = false;
         try {
@@ -18,27 +22,12 @@ public class OrderHandler {
             conn = dbManager.getConnection();
             // Step 2: Disable auto-commit for transaction handling
             conn.setAutoCommit(false);
-
+            int totPrice=0;
             // Step 3: Check stock for each item and reduce stock if available
             for (int itemId : ids) {
-                if (conn == null) {
-                    System.out.println("Connection is null1");
-                    throw new SQLException("Database connection is null");
-                }
-                if (conn.isClosed()) {
-                    System.out.println("Connection is closed1");
-                    throw new SQLException("Database connection is closed");
-                }
                 // Check stock using ItemHandler (which internally uses ItemDB)
                 int stock = ItemHandler.getstockById(itemId);
-                if (conn == null) {
-                    System.out.println("Connection is null2");
-                    throw new SQLException("Database connection is null");
-                }
-                if (conn.isClosed()) {
-                    System.out.println("Connection is closed2");
-                    throw new SQLException("Database connection is closed");
-                }
+                totPrice+=ItemHandler.getPriceById(itemId);
                 if (stock > 0) {
                     // Reduce the stock for this item
                     System.out.println("wow nu ska vi bli av med ID:"+itemId);
@@ -51,9 +40,9 @@ public class OrderHandler {
             }
 
             // Step 4: If all stock updates succeed, create an order
-            //int userId = (int) request.getSession().getAttribute("userId");  // Assuming userId is stored in session
-            //OrderDB.createOrder(userId, itemIds);  // Create the order
-
+            int userId = UserDB.getUserIdByUsername(dbManager.getConnection(),username); // Assuming userId is stored in session
+            int orderId=OrderDB.createOrder(dbManager.getConnection(),userId, totPrice);  // Create the order
+            OrderDB.createOrderItems(dbManager.getConnection(),orderId,ids);
             // Step 5: Commit the transaction
             conn.commit();
             successFlag = true;

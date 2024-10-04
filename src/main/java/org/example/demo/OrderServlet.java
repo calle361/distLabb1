@@ -50,7 +50,7 @@ public class OrderServlet extends HttpServlet {
                 }
             }
 
-            if (OrderHandler.handleTransaktion(itemIds)){
+            if (OrderHandler.handleTransaktion(itemIds,(String) request.getSession().getAttribute("username"))){
                 response.getWriter().println("Order placed successfully!");
                 checkoutStatus="Order placed successfully!";
             }else {
