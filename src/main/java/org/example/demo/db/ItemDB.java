@@ -11,32 +11,29 @@ public class ItemDB {
 
     // Method to retrieve all items from the database
     public static Collection<Item> getItems(Connection con) throws SQLException {
-                    List<Item> items = new ArrayList<>();
-                    //Connection con = null;
-                    Statement st = null;
-                    ResultSet rs = null;
+        List<Item> items = new ArrayList<>();
+        Statement st = null;
+        ResultSet rs = null;
 
-                    try {
-                        if (con!=null&&!con.isClosed()){
-                            System.out.println("con is open in get items itemdb");
-                        }
-                        //con = connection;  // Ensure DBManager.getConnection() is working and doesn't return null
-                        if (con == null) {
-                            throw new SQLException("Unable to establish a database connection.");
-                        }
+        try {
+            if (con != null && !con.isClosed()) {
+                System.out.println("con is open in get items itemdb");
+            }
 
-                        st = con.createStatement();
-                        rs = st.executeQuery("SELECT * FROM products");
+            st = con.createStatement();
+            // Lägg till categoryId i din SQL-fråga
+            rs = st.executeQuery("SELECT id, name, description, price, stock, categoryid FROM products");
 
-                        while (rs.next()) {
-                            int id = rs.getInt("id");
-                            String name = rs.getString("name");
-                            String description = rs.getString("description");
-                            int price = rs.getInt("price");
-                            int stock = rs.getInt("stock");
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String name = rs.getString("name");
+                String description = rs.getString("description");
+                int price = rs.getInt("price");
+                int stock = rs.getInt("stock");
+                int categoryId = rs.getInt("categoryid");  // Hämta categoryId
 
-                            // Create an Item object and add it to the collection
-                Item item = new Item(id, name, description, price, stock);
+                // Skapa ett Item-objekt och lägg till det i listan
+                Item item = new Item(id, name, description, price, stock, categoryId);
                 items.add(item);
             }
 
@@ -44,59 +41,53 @@ public class ItemDB {
             e.printStackTrace();
             throw new SQLException("Error fetching items from the database.", e);
         } finally {
-            // Ensure that resources are closed properly
             if (rs != null) rs.close();
             if (st != null) st.close();
-            //if (con != null) con.close();
         }
 
         return items;
     }
 
-    public static Item getItem(Connection connection,int idToSearch) throws SQLException {
+
+    public static Item getItem(Connection connection, int idToSearch) throws SQLException {
         Item item = null;
-        Connection con = null;
         PreparedStatement ps = null;
-        //Statement st = null;
         ResultSet rs = null;
 
         try {
-            con = connection;  // Ensure DBManager.getConnection() is working and doesn't return null
-            if (con == null) {
+            if (connection == null) {
                 throw new SQLException("Unable to establish a database connection.");
             }
-            // Prepare the SQL query with a parameter placeholder
-            String sql = "SELECT * FROM products WHERE id = ?";
-            ps = con.prepareStatement(sql);
 
-            // Set the value for the placeholder
+            String sql = "SELECT id, name, description, price, stock, categoryid FROM products WHERE id = ?";
+            ps = connection.prepareStatement(sql);
             ps.setInt(1, idToSearch);
-            // Execute the query
+
             rs = ps.executeQuery();
-            // Process the result
+
             if (rs.next()) {
                 int id = rs.getInt("id");
                 String name = rs.getString("name");
                 String description = rs.getString("description");
                 int price = rs.getInt("price");
                 int stock = rs.getInt("stock");
+                int categoryId = rs.getInt("categoryid");  // Hämta categoryId
 
-                // Create an Item object based on the retrieved data
-                item = new Item(id, name, description, price, stock);
+                // Skapa ett Item-objekt baserat på hämtade data
+                item = new Item(id, name, description, price, stock, categoryId);
             }
-
 
         } catch (SQLException e) {
             e.printStackTrace();
             throw new SQLException("Error fetching items from the database.", e);
         } finally {
-            // Ensure that resources are closed properly
             if (rs != null) rs.close();
             if (ps != null) ps.close();
-            //if (con != null) con.close();
         }
+
         return item;
     }
+
 
     public static void updateStock(Connection connection, int itemId, int newStock) throws SQLException {
         System.out.println("inne i updateStock i itemDB");
@@ -120,19 +111,26 @@ public class ItemDB {
     }
 
 
+    public static void addItem(Connection connection, String name, String description, double price, int stock, int categoryId) throws SQLException {
+        String query = "INSERT INTO products (name, description, price, stock, categoryid) VALUES (?, ?, ?, ?, ?)";
 
-    public static void addItem(Connection connection, String name, String description, double price, int stock) throws SQLException {
-        String query = "INSERT INTO products (name, description, price, stock) VALUES (?, ?, ?, ?)";
-
-        try (Connection con = connection;
-             PreparedStatement ps = con.prepareStatement(query)) {
-
-            // Ställ in parametrarna för INSERT
+        try (PreparedStatement ps = connection.prepareStatement(query)) {
             ps.setString(1, name);
             ps.setString(2, description);
             ps.setDouble(3, price);
             ps.setInt(4, stock);
+            ps.setInt(5, categoryId);  // Lägg till categoryId i INSERT
 
+            ps.executeUpdate();
+        }
+    }
+
+    public static void updateItem(Connection connection, int itemId, String newName, int categoryId) throws SQLException {
+        String query = "UPDATE products SET name = ?, categoryid = ? WHERE id = ?";
+        try (PreparedStatement ps = connection.prepareStatement(query)) {
+            ps.setString(1, newName);
+            ps.setInt(2, categoryId);
+            ps.setInt(3, itemId);
             ps.executeUpdate();
         }
     }

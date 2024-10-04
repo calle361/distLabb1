@@ -59,8 +59,17 @@ public class UserServlet extends HttpServlet {
             case "addItem":
                 handleAddItem(request, response);
                 break;
+            case "editItem":
+                handleEditItem(request, response);
+                break;
             case "updateStock":
                 handleUpdateStock(request, response);  // Ny action för att hantera lageruppdatering
+                break;
+            case "addCategory":
+                handleAddCategory(request, response);  // Ny action för att hantera lageruppdatering
+                break;
+            case "editCategory":
+                handleEditCategory(request, response);
                 break;
             default:
                 response.sendRedirect("error.jsp");  // Handle unknown actions
@@ -214,9 +223,10 @@ public class UserServlet extends HttpServlet {
         String description = request.getParameter("description");
         double price = Double.parseDouble(request.getParameter("price"));
         int stock = Integer.parseInt(request.getParameter("stock"));
+        int categoryId = Integer.parseInt(request.getParameter("category"));
 
         try {
-            ItemHandler.addItem(name, description, price, stock);  // Använd business-lagret
+            ItemHandler.addItem(name, description, price, stock, categoryId);  // Använd business-lagret
             request.setAttribute("message", "Item added successfully.");
         } catch (SQLException e) {
             e.printStackTrace();
@@ -226,6 +236,50 @@ public class UserServlet extends HttpServlet {
         request.getRequestDispatcher("warehouse.jsp").forward(request, response);  // Ladda om sidan utan omdirigering
     }
 
+    private void handleAddCategory(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        String categoryName = request.getParameter("categoryName");
+
+        try {
+            ItemHandler.addCategory(categoryName);  // Använd ItemHandler för att lägga till kategori
+            request.setAttribute("message", "Category added successfully.");
+        } catch (SQLException e) {
+            e.printStackTrace();
+            request.setAttribute("message", "Error adding category: " + e.getMessage());
+        }
+
+        request.getRequestDispatcher("warehouse.jsp").forward(request, response);  // Ladda om sidan utan omdirigering
+    }
+
+    private void handleEditItem(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        int itemId = Integer.parseInt(request.getParameter("id"));
+        String newName = request.getParameter("name");
+        int categoryId = Integer.parseInt(request.getParameter("category"));
+
+        try {
+            ItemHandler.updateItem(itemId, newName, categoryId);
+            request.setAttribute("message", "Item updated successfully.");
+        } catch (SQLException e) {
+            e.printStackTrace();
+            request.setAttribute("message", "Error updating item: " + e.getMessage());
+        }
+
+        request.getRequestDispatcher("warehouse.jsp").forward(request, response);
+    }
+
+    private void handleEditCategory(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        int categoryId = Integer.parseInt(request.getParameter("categoryId"));
+        String newName = request.getParameter("newName");
+
+        try {
+            ItemHandler.updateCategory(categoryId, newName);
+            request.setAttribute("message", "Category updated successfully.");
+        } catch (SQLException e) {
+            e.printStackTrace();
+            request.setAttribute("message", "Error updating category: " + e.getMessage());
+        }
+
+        request.getRequestDispatcher("warehouse.jsp").forward(request, response);
+    }
 
 
 }

@@ -1,5 +1,7 @@
 package org.example.demo.bo;
 
+import org.example.demo.db.CategoryDB;
+import org.example.demo.db.DBManager;
 import org.example.demo.db.ItemDB;
 
 import java.sql.SQLException;
@@ -12,14 +14,16 @@ public class Item {
     private int id;
     private int amount; // Or consider renaming to stock
     private String description;
+    private int categoryId;
 
     // Constructor to initialize Item object
-    public Item(int id, String name, String description, int price, int amount) {
+    public Item(int id, String name, String description, int price, int amount, int categoryId) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.price = price;
         this.amount = amount;
+        this.categoryId = categoryId;
     }
 /*
     // Static method to get all items from the database
@@ -49,6 +53,15 @@ public class Item {
     }
 
      */
+    public Category getCategory() {
+        Category category = null;
+        try {
+            category = CategoryDB.getCategoryById(DBManager.getConnection(), this.categoryId);
+        } catch (SQLException e) {
+            e.printStackTrace();  // Handle the error gracefully
+        }
+        return category;
+    }
 
     // Getters and setters for the fields
     public String getName() {
@@ -89,5 +102,12 @@ public class Item {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+    public int getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(int categoryId) {
+        this.categoryId = categoryId;
     }
 }
