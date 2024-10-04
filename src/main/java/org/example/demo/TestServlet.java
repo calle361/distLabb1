@@ -3,13 +3,31 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import jakarta.servlet.ServletException;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
+import org.example.demo.bo.Model;
+
 @WebServlet(name = "TestServlet", value = "/items")
 public class TestServlet extends HttpServlet {
     private String message;
-    public void init() {
-        message = "Hello World!";
+    @Override
+    public void init() throws ServletException {
+    /*
+        System.out.println("INITIALIZE\n\n\n\n\n");
+
+        Model.initialize();
+
+     */
+        super.init();
+    }
+
+    @Override
+    public void destroy() {
+        super.destroy();
+        //Model.shutdown();
+
+        System.out.println("SHUTDOWN");
     }
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setContentType("text/html");
@@ -47,6 +65,5 @@ public class TestServlet extends HttpServlet {
         response.sendRedirect(request.getContextPath() + "/index.jsp");
 
     }
-    public void destroy() {
-    }
+
 }

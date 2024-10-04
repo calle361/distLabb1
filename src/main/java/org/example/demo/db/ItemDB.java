@@ -10,29 +10,32 @@ import java.util.List;
 public class ItemDB {
 
     // Method to retrieve all items from the database
-    public static Collection<Item> getItems(Connection connection) throws SQLException {
-        List<Item> items = new ArrayList<>();
-        Connection con = null;
-        Statement st = null;
-        ResultSet rs = null;
+    public static Collection<Item> getItems(Connection con) throws SQLException {
+                    List<Item> items = new ArrayList<>();
+                    //Connection con = null;
+                    Statement st = null;
+                    ResultSet rs = null;
 
-        try {
-            con = connection;  // Ensure DBManager.getConnection() is working and doesn't return null
-            if (con == null) {
-                throw new SQLException("Unable to establish a database connection.");
-            }
+                    try {
+                        if (con!=null&&!con.isClosed()){
+                            System.out.println("con is open in get items itemdb");
+                        }
+                        //con = connection;  // Ensure DBManager.getConnection() is working and doesn't return null
+                        if (con == null) {
+                            throw new SQLException("Unable to establish a database connection.");
+                        }
 
-            st = con.createStatement();
-            rs = st.executeQuery("SELECT * FROM products");
+                        st = con.createStatement();
+                        rs = st.executeQuery("SELECT * FROM products");
 
-            while (rs.next()) {
-                int id = rs.getInt("id");
-                String name = rs.getString("name");
-                String description = rs.getString("description");
-                int price = rs.getInt("price");
-                int stock = rs.getInt("stock");
+                        while (rs.next()) {
+                            int id = rs.getInt("id");
+                            String name = rs.getString("name");
+                            String description = rs.getString("description");
+                            int price = rs.getInt("price");
+                            int stock = rs.getInt("stock");
 
-                // Create an Item object and add it to the collection
+                            // Create an Item object and add it to the collection
                 Item item = new Item(id, name, description, price, stock);
                 items.add(item);
             }
@@ -44,7 +47,7 @@ public class ItemDB {
             // Ensure that resources are closed properly
             if (rs != null) rs.close();
             if (st != null) st.close();
-            if (con != null) con.close();
+            //if (con != null) con.close();
         }
 
         return items;
@@ -90,14 +93,25 @@ public class ItemDB {
             // Ensure that resources are closed properly
             if (rs != null) rs.close();
             if (ps != null) ps.close();
-            if (con != null) con.close();
+            //if (con != null) con.close();
         }
         return item;
     }
 
     public static void updateStock(Connection connection, int itemId, int newStock) throws SQLException {
+        System.out.println("inne i updateStock i itemDB");
+        if (connection == null) {
+            System.out.println("Connection is null");
+            throw new SQLException("Database connection is null");
+        }
+        if (connection.isClosed()) {
+            System.out.println("Connection is closed");
+            throw new SQLException("Database connection is closed");
+        }
+
         String query = "UPDATE products SET stock = ? WHERE id = ?";
         try (PreparedStatement ps = connection.prepareStatement(query)) {
+            System.out.println("inne i updateStock i itemDB i try");
             ps.setInt(1, newStock);
             ps.setInt(2, itemId);
             int rowsUpdated = ps.executeUpdate();

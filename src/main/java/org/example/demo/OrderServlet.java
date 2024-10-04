@@ -4,6 +4,9 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
+import jakarta.servlet.RequestDispatcher;
+import jakarta.servlet.ServletException;
 import org.example.demo.db.DBManager;
 import org.example.demo.db.ItemDB;
 import org.example.demo.db.OrderDB;
@@ -28,10 +31,10 @@ public class OrderServlet extends HttpServlet {
         out.println("<h1>" + message + "</h1>");
         out.println("</body></html>");
     }
-    public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         // Retrieve the itemIds from the POST request (they will be received as Strings)
         String[] itemIdsStr = request.getParameterValues("itemIds");
-
+        String checkoutStatus;
         if (itemIdsStr != null) {
             // Create a list to hold the integer item IDs
             List<Integer> itemIds = new ArrayList<>();
@@ -49,15 +52,23 @@ public class OrderServlet extends HttpServlet {
 
             if (OrderHandler.handleTransaktion(itemIds)){
                 response.getWriter().println("Order placed successfully!");
+                checkoutStatus="Order placed successfully!";
             }else {
                 response.getWriter().println("Transaction failed, rolled back.");
+                checkoutStatus="Transaction failed, rolled back.";
             }
 
         } else {
             // No items received, handle this case
             System.out.println("No items received.");
             response.getWriter().println("No items in cart.");
+            checkoutStatus="Failed.No items in cart.";
         }
+        request.setAttribute("checkoutStatus", checkoutStatus);
+        // Forward the request to checkedOut.jsp
+        request.getSession().removeAttribute("cart");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/checkedOut.jsp");
+        dispatcher.forward(request, response);
 
     }
     public void destroy() {

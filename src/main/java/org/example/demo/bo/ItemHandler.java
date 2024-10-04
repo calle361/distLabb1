@@ -11,10 +11,15 @@ import java.util.Collection;
 import java.util.List;
 
 public class ItemHandler {
-    //static DBManager dbManager = Model.getDBManager();
-    static Connection conn=Model.getConnection();
+    static DBManager dbManager = Model.getDBManager();
+    //static Connection conn=Model.getConnection();
     public static Collection<ItemInfo> getAllItems() throws SQLException {
         // Use generics to specify type safety
+        System.out.println("im in the get all items");
+        Connection conn = dbManager.getConnection();
+        if (conn!=null&&!conn.isClosed()){
+            System.out.println("connection is open in get all items");
+        }
         Collection<Item> itemsFromDb = ItemDB.getItems(conn);
         List<ItemInfo> items = new ArrayList<>();
 
@@ -32,32 +37,39 @@ public class ItemHandler {
         return items;
     }
     public static ItemInfo getItemById(int id) throws SQLException {
-        Item itemFromDb=ItemDB.getItem(conn,id);
+        Item itemFromDb=ItemDB.getItem(dbManager.getConnection(),id);
         ItemInfo itemInfo=new ItemInfo(itemFromDb.getId(), itemFromDb.getName(), itemFromDb.getDescription(), itemFromDb.getPrice(), itemFromDb.getAmount());
         return itemInfo;
     }
     public static int getstockById(int id) throws SQLException {
-        Item itemFromDb=ItemDB.getItem(conn,id);
+        Item itemFromDb=ItemDB.getItem(dbManager.getConnection(),id);
         int stock=itemFromDb.getAmount();
         return stock;
 
     }
     // Add a new item to the inventory
     public static void addItem(String name, String description, double price, int stock) throws SQLException {
-        try (var connection = conn) {
+        try (var connection = dbManager.getConnection()) {
             ItemDB.addItem(connection, name, description, price, stock);
         }
     }
 
     // Update the stock of an existing item
     public static void updateStock(int itemId, int newStock) throws SQLException {
-            try (var connection2 =conn) {
+            try (var connection2 =dbManager.getConnection()) {
                 ItemDB.updateStock(connection2, itemId, newStock);
             }
     }
     public static void updateStock2(Connection connection,int itemId, int newStock) throws SQLException {
+        /*
         try (var connection2 =connection ) {
             ItemDB.updateStock(connection2, itemId, newStock);
         }
+
+         */
+
+
+        System.out.println("INNE I ITEM HANDLER OCH SKA SÄNKA STOCK FÖR ID:"+itemId);
+        ItemDB.updateStock(connection,itemId,newStock);
     }
 }

@@ -82,6 +82,8 @@
     List<String> cart = (List<String>) session.getAttribute("cart");
     if (cart != null) {
         amountInShoppingCart = cart.size();
+    }else {
+        amountInShoppingCart=0;
     }
 %>
 <a href="shoppingCart.jsp">Kundvagn (<%= amountInShoppingCart %>)</a><br>
