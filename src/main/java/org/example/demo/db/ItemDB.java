@@ -97,6 +97,10 @@ public class ItemDB {
         }
         return item;
     }
+    public static String getItemName(Connection connection, int id) throws SQLException {
+        Item item = getItem(connection,id);
+        return item.getName();
+    }
 
     public static void updateStock(Connection connection, int itemId, int newStock) throws SQLException {
         System.out.println("inne i updateStock i itemDB");

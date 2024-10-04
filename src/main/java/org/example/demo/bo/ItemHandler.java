@@ -13,13 +13,13 @@ import java.util.List;
 public class ItemHandler {
     static DBManager dbManager = Model.getDBManager();
     //static Connection conn=Model.getConnection();
+
+
+
     public static Collection<ItemInfo> getAllItems() throws SQLException {
         // Use generics to specify type safety
-        System.out.println("im in the get all items");
         Connection conn = dbManager.getConnection();
-        if (conn!=null&&!conn.isClosed()){
-            System.out.println("connection is open in get all items");
-        }
+
         Collection<Item> itemsFromDb = ItemDB.getItems(conn);
         List<ItemInfo> items = new ArrayList<>();
 

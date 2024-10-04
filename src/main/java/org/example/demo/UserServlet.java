@@ -81,6 +81,7 @@ public class UserServlet extends HttpServlet {
             for (Cookie cookie : cookies) {
                 if (cookie.getName().equals("username") || cookie.getName().equals("password")) {
                     cookie.setMaxAge(0);  // Sätt cookie-livslängden till 0 för att ta bort dem
+                    cookie.setMaxAge(0);  // Sätt cookie-livslängden till 0 för att ta bort dem
                     response.addCookie(cookie);
                 }
             }
