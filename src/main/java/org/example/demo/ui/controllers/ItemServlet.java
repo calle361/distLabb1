@@ -8,7 +8,7 @@ import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
 
 @WebServlet(name = "TestServlet", value = "/items")
-public class TestServlet extends HttpServlet {
+public class ItemServlet extends HttpServlet {
     private String message;
     @Override
     public void init() throws ServletException {

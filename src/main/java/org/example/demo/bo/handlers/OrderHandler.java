@@ -6,6 +6,8 @@ import org.example.demo.db.DBManager;
 import org.example.demo.db.ItemDB;
 import org.example.demo.db.OrderDB;
 import org.example.demo.db.UserDB;
+import org.example.demo.ui.facades.OrderInfo;
+import org.example.demo.ui.facades.OrderItemInfo;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -78,15 +80,27 @@ public class OrderHandler {
 
         return successFlag;
     }
-    public static List<Order> getAllOrders(String username) throws SQLException {
+    public static List<OrderInfo> getAllOrders(String username) throws SQLException {
         Connection conn = dbManager.getConnection();
         List<Order> orders = OrderDB.getAllOrders(conn);
         //ksk lägg till att de görs om till facade.
-        return orders;
+        List<OrderInfo>orderInfos=new ArrayList<OrderInfo>();
+        for (Order order : orders) {
+            orderInfos.add(new OrderInfo(order.getOid(), order.getPrice(), order.getUserid(),order.getDate()));
+        }
+        return orderInfos;
     }
-    public static List<OrderItem> getOrderItems(int orderId) throws SQLException {
+    public static List<OrderItemInfo> getOrderItems(int orderId) throws SQLException {
         Connection conn = dbManager.getConnection();
-        return OrderDB.getOrderItemsByOrderId(conn, orderId);
+        List<OrderItem> orderItems=OrderDB.getOrderItemsByOrderId(conn, orderId);
+        List<OrderItemInfo>orderItemInfos=new ArrayList<>();
+        for (OrderItem orderItem : orderItems) {
+            orderItemInfos.add(new OrderItemInfo(orderItem.getOrderItemid(),
+                    orderItem.getOrderid(),
+                    orderItem.getOrderItemid(),
+                    orderItem.getOrderItemname()));
+        }
+        return orderItemInfos;
     }
     public static void removeOrder(int orderId) throws SQLException {
         Connection conn = dbManager.getConnection();
