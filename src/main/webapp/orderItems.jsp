@@ -1,5 +1,6 @@
 <%@ page import="org.example.demo.bo.models.OrderItem" %>
-<%@ page import="java.util.List" %><%--
+<%@ page import="java.util.List" %>
+<%@ page import="org.example.demo.ui.facades.OrderItemInfo" %><%--
   Created by IntelliJ IDEA.
   User: calle
   Date: 2024-10-04
@@ -15,7 +16,7 @@
 <h1>Order Items</h1>
 <%
     // Get the order items from the request attribute
-    List<OrderItem> orderItems = (List<OrderItem>) request.getAttribute("orderItems");
+    List<OrderItemInfo> orderItems = (List<OrderItemInfo>) request.getAttribute("orderItems");
 
     // Check if the list is not empty
     if (orderItems != null && !orderItems.isEmpty()) {
@@ -29,10 +30,10 @@
 
     <%
         // Loop through each OrderItem and display its details
-        for (OrderItem item : orderItems) {
+        for (OrderItemInfo item : orderItems) {
     %>
     <tr>
-        <td><%= item.getOrderItemname() %></td>
+        <td><%= item.getItemname() %></td>
         <td><%= item.getItemid() %></td>
     </tr>
     <%
