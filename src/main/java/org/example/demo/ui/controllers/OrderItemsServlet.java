@@ -8,8 +8,8 @@ import jakarta.servlet.ServletException;
 
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
-import org.example.demo.bo.OrderHandler;
-import org.example.demo.bo.OrderItem;
+import org.example.demo.bo.handlers.OrderHandler;
+import org.example.demo.bo.models.OrderItem;
 
 @WebServlet(name = "OrderItemsServlet", value = "/orderItems")
 public class OrderItemsServlet extends HttpServlet {

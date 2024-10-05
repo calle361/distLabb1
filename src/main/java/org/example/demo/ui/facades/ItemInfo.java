@@ -1,6 +1,6 @@
 package org.example.demo.ui.facades;
 
-import org.example.demo.bo.Category;
+import org.example.demo.bo.models.Category;
 
 public class ItemInfo {
     private int id;

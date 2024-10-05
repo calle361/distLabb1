@@ -1,12 +1,9 @@
-package org.example.demo.bo;
+package org.example.demo.bo.models;
 
 import org.example.demo.db.CategoryDB;
 import org.example.demo.db.DBManager;
-import org.example.demo.db.ItemDB;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Collection;
 
 public class Item {
     private String name;
@@ -25,34 +22,7 @@ public class Item {
         this.amount = amount;
         this.categoryId = categoryId;
     }
-/*
-    // Static method to get all items from the database
-    public static Collection<Item> getItems() {
-        Collection<Item> items = new ArrayList<>();
-        try {
-            items = ItemDB.getItems();  // Fetch items and catch any SQLException that occurs
-        } catch (SQLException e) {
-            e.printStackTrace();  // Print the stack trace or log it
-            // You can also handle the error gracefully here
-        }
-        return items;  // Return an empty collection or partial results in case of an error
-    }
 
- */
-
-    /*
-    public static Item getItem(int id) {
-        Item item = null;
-        try{
-            item=ItemDB.getItem(,id);
-        } catch (SQLException e) {
-            e.printStackTrace();  // Print the stack trace or log it
-            // You can also handle the error gracefully here
-        }
-        return item;
-    }
-
-     */
     public Category getCategory() {
         Category category = null;
         try {

@@ -1,6 +1,6 @@
-<%@ page import="org.example.demo.bo.ItemHandler" %>
+<%@ page import="org.example.demo.bo.handlers.ItemHandler" %>
 <%@ page import="org.example.demo.ui.facades.ItemInfo" %>
-<%@ page import="org.example.demo.bo.Category" %>
+<%@ page import="org.example.demo.bo.models.Category" %>
 <%@ page import="java.util.Collection" %>
 <%@ page import="java.util.List" %>
 
@@ -145,7 +145,7 @@
   </tr>
   <% } %>
 </table>
-
+<a href="${pageContext.request.contextPath}/order">pack orders</a>
 <!-- Visar meddelande om något har redigerats -->
 <% if (request.getAttribute("message") != null) { %>
 <p><%= request.getAttribute("message") %></p>

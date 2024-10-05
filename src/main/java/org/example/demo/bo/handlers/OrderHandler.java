@@ -1,5 +1,7 @@
-package org.example.demo.bo;
+package org.example.demo.bo.handlers;
 
+import org.example.demo.bo.models.Order;
+import org.example.demo.bo.models.OrderItem;
 import org.example.demo.db.DBManager;
 import org.example.demo.db.ItemDB;
 import org.example.demo.db.OrderDB;
@@ -11,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class OrderHandler {
-    static DBManager dbManager = Model.getDBManager();
+    static DBManager dbManager;
 
 
     public static boolean handleTransaktion(List<Integer> ids,String username){

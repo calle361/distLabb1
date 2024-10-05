@@ -3,7 +3,7 @@ package org.example.demo.db;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import org.example.demo.bo.Category;
+import org.example.demo.bo.models.Category;
 
 public class CategoryDB {
 

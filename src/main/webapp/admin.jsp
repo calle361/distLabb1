@@ -1,5 +1,5 @@
 <%@ page import="org.example.demo.bo.PermissionLevel" %>
-<%@ page import="org.example.demo.bo.User" %>
+<%@ page import="org.example.demo.bo.models.User" %>
 
 <%
     User foundUser = (User) request.getAttribute("foundUser");

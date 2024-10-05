@@ -1,39 +1,16 @@
-package org.example.demo.bo;
+package org.example.demo.bo.handlers;
 
 import org.example.demo.bo.PermissionLevel;
-import org.example.demo.bo.User;
+import org.example.demo.bo.models.User;
 import org.example.demo.db.DBManager;
 import org.example.demo.db.UserDB;
 
 import java.sql.Connection;
 import java.sql.SQLException;
 
-/**
- * Model-klass som hanterar applikationens affärslogik och databasoperationer
- */
-public class Model {
+public class UserHandler {
 
     static DBManager dbManager;
-
-    // Initiera databasen vid uppstart
-    public static boolean initialize() {
-        dbManager = new DBManager();
-        try {
-            return dbManager.connect(DBManager.getDefaultDatabase());
-        } catch (SQLException e) {
-            System.err.println("Kunde inte ansluta till databasen: " + e.getMessage());
-            return false;
-        }
-    }
-
-    // Stäng anslutningen till databasen vid nedstängning
-    public static void shutdown() {
-        try {
-            dbManager.disconnect();
-        } catch (SQLException e) {
-            System.err.println("Kunde inte stänga anslutningen: " + e.getMessage());
-        }
-    }
 
     // Logga in en användare med username och password
     public static User loginUser(String username, String password) {
@@ -76,9 +53,4 @@ public class Model {
         }
         return isUpdated;
     }
-
-    public static DBManager getDBManager() {
-        return dbManager;
-    }
 }
-

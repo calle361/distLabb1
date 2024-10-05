@@ -3,8 +3,8 @@ package org.example.demo.db;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import org.example.demo.bo.Order;
-import org.example.demo.bo.OrderItem;
+import org.example.demo.bo.models.Order;
+import org.example.demo.bo.models.OrderItem;
 
 public class OrderDB {
 

@@ -1,6 +1,6 @@
 package org.example.demo.db;
 
-import org.example.demo.bo.Item;
+import org.example.demo.bo.models.Item;
 
 import java.sql.*;
 import java.util.ArrayList;

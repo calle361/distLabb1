@@ -4,7 +4,9 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
 import org.example.demo.bo.PermissionLevel;
-import org.example.demo.bo.*;
+import org.example.demo.bo.handlers.ItemHandler;
+import org.example.demo.bo.handlers.UserHandler;
+import org.example.demo.bo.models.User;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -73,7 +75,6 @@ public class UserServlet extends HttpServlet {
         }
     }
 
-    // Utloggningshantering
     private void handleLogout(HttpServletRequest request, HttpServletResponse response) throws IOException {
         HttpSession session = request.getSession(false);  // Hämta nuvarande session
         if (session != null) {
@@ -103,7 +104,7 @@ public class UserServlet extends HttpServlet {
         String rememberMe = request.getParameter("rememberMe");
 
         // Använd Model för att hantera inloggning
-        User user = Model.loginUser(username, password);
+        User user = UserHandler.loginUser(username, password);
 
         if (user != null) {
             HttpSession session = request.getSession();
@@ -139,7 +140,7 @@ public class UserServlet extends HttpServlet {
         PermissionLevel permissionLevel = PermissionLevel.Customer;
 
         // Använd Model för att hantera registrering
-        User user = Model.registerUser(username, password, permissionLevel);
+        User user = UserHandler.registerUser(username, password, permissionLevel);
 
         if (user != null) {
             response.sendRedirect("login.jsp");  // Skicka till login-sidan efter registrering
@@ -158,7 +159,7 @@ public class UserServlet extends HttpServlet {
         PermissionLevel newPermissionLevel = PermissionLevel.valueOf(newRole);
 
         // Använd Model för att uppdatera användarroll
-        boolean updated = Model.updateUserRole(username, newPermissionLevel);
+        boolean updated = UserHandler.updateUserRole(username, newPermissionLevel);
 
         if (updated) {
             request.setAttribute("message", "User role updated successfully.");
@@ -176,7 +177,7 @@ public class UserServlet extends HttpServlet {
         String searchUsername = request.getParameter("searchUsername");
 
         // Använd Model för att hitta användaren
-        User foundUser = Model.findUserByUsername(searchUsername);
+        User foundUser = UserHandler.findUserByUsername(searchUsername);
 
         if (foundUser != null) {
             request.setAttribute("foundUser", foundUser);  // Spara den hittade användaren i request-attribut
