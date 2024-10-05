@@ -6,7 +6,7 @@
 
 <h1 style="display: inline-block;">Warehouse</h1>
 <a href="index.jsp" style="display: inline-block; margin-left: 20px;">Home page</a>
-<a href="${pageContext.request.contextPath}/order">pack orders</a>
+<a href="${pageContext.request.contextPath}/order" style="display: inline-block; margin-left: 20px;" >Pack orders</a>
 
 
 <%

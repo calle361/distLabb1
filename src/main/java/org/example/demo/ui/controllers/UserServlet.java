@@ -134,8 +134,6 @@ public class UserServlet extends HttpServlet {
         }
     }
 
-
-
     private void handleRegister(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
@@ -152,7 +150,6 @@ public class UserServlet extends HttpServlet {
             response.getWriter().println("Registration failed.");
         }
     }
-
 
 
     private void handleUpdateRole(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -219,7 +216,6 @@ public class UserServlet extends HttpServlet {
     }
 
 
-    // Lägg till ny produkt
     private void handleAddItem(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         String name = request.getParameter("name");
         String description = request.getParameter("description");
