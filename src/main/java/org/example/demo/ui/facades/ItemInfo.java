@@ -1,4 +1,4 @@
-package org.example.demo.ui;
+package org.example.demo.ui.facades;
 
 import org.example.demo.bo.Category;
 

@@ -1,16 +1,12 @@
-package org.example.demo;
+package org.example.demo.ui.controllers;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
-import org.example.demo.db.UserDB;
-import org.example.demo.db.ItemDB;
 import org.example.demo.bo.PermissionLevel;
-import org.example.demo.db.DBManager;
 import org.example.demo.bo.*;
 
 import java.io.IOException;
-import java.sql.Connection;
 import java.sql.SQLException;
 
 @WebServlet(name = "userServlet", value = "/user-servlet")

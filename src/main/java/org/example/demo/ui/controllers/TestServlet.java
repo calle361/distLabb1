@@ -1,4 +1,4 @@
-package org.example.demo;
+package org.example.demo.ui.controllers;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -6,7 +6,6 @@ import java.util.List;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
-import org.example.demo.bo.Model;
 
 @WebServlet(name = "TestServlet", value = "/items")
 public class TestServlet extends HttpServlet {

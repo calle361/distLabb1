@@ -3,7 +3,7 @@ package org.example.demo.bo;
 import org.example.demo.db.CategoryDB;
 import org.example.demo.db.DBManager;
 import org.example.demo.db.ItemDB;
-import org.example.demo.ui.ItemInfo;
+import org.example.demo.ui.facades.ItemInfo;
 
 import java.sql.Connection;
 import java.sql.SQLException;

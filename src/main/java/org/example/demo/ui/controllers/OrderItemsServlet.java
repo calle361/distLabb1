@@ -1,7 +1,6 @@
-package org.example.demo;
+package org.example.demo.ui.controllers;
 import java.io.*;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.servlet.RequestDispatcher;
@@ -9,12 +8,11 @@ import jakarta.servlet.ServletException;
 
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
-import org.example.demo.bo.Order;
 import org.example.demo.bo.OrderHandler;
 import org.example.demo.bo.OrderItem;
 
-@WebServlet(name = "OrderServlet", value = "/order")
-public class OrderServlet extends HttpServlet {
+@WebServlet(name = "OrderItemsServlet", value = "/orderItems")
+public class OrderItemsServlet extends HttpServlet {
     private String message;
     public void init() {
         message = "Hello World!";
@@ -22,13 +20,13 @@ public class OrderServlet extends HttpServlet {
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         HttpSession session = request.getSession();
 
-        String sessionUsername = (String) session.getAttribute("username");
-        //int userId = (int) session.getAttribute("uid"); // Assuming userId is stored in session
-
+        // Get the orderId from the request
+        String orderIdStr = request.getParameter("orderId");
+        int orderId = Integer.parseInt(orderIdStr);
         try {
-            List<Order> orders = OrderHandler.getAllOrders(sessionUsername);
-            request.setAttribute("orders", orders);
-            RequestDispatcher dispatcher = request.getRequestDispatcher("/packOrder.jsp");
+            List<OrderItem> orderItems = OrderHandler.getOrderItems(orderId);
+            request.setAttribute("orderItems", orderItems);
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/orderItems.jsp");
             dispatcher.forward(request, response);
         } catch (SQLException | ServletException e) {
             e.printStackTrace();
@@ -37,7 +35,14 @@ public class OrderServlet extends HttpServlet {
 
     }
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-
+        String orderIdStr = request.getParameter("orderId");
+        int orderId = Integer.parseInt(orderIdStr);
+        try {
+            OrderHandler.removeOrder(orderId);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        response.sendRedirect(request.getContextPath() + "/index.jsp");
 
     }
     public void destroy() {
