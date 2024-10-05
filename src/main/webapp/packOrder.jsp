@@ -1,7 +1,7 @@
-<%@ page import="org.example.demo.bo.Order" %>
+<%@ page import="org.example.demo.bo.models.Order" %>
 <%@ page import="java.util.List" %>
-<%@ page import="org.example.demo.bo.OrderItem" %>
-<%@ page import="org.example.demo.bo.OrderHandler" %><%--
+<%@ page import="org.example.demo.bo.models.OrderItem" %>
+<%@ page import="org.example.demo.bo.handlers.OrderHandler" %><%--
   Created by IntelliJ IDEA.
   User: calle
   Date: 2024-10-04

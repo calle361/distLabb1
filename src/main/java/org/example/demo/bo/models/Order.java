@@ -1,4 +1,4 @@
-package org.example.demo.bo;
+package org.example.demo.bo.models;
 
 import java.sql.Timestamp;
 

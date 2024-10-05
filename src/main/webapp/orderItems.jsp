@@ -1,4 +1,4 @@
-<%@ page import="org.example.demo.bo.OrderItem" %>
+<%@ page import="org.example.demo.bo.models.OrderItem" %>
 <%@ page import="java.util.List" %><%--
   Created by IntelliJ IDEA.
   User: calle

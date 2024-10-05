@@ -1,5 +1,7 @@
-package org.example.demo.bo;
+package org.example.demo.bo.handlers;
 
+import org.example.demo.bo.models.Category;
+import org.example.demo.bo.models.Item;
 import org.example.demo.db.CategoryDB;
 import org.example.demo.db.DBManager;
 import org.example.demo.db.ItemDB;

@@ -1,12 +1,9 @@
-package org.example.demo.bo;
+package org.example.demo.bo.models;
 
 import org.example.demo.db.CategoryDB;
 import org.example.demo.db.DBManager;
-import org.example.demo.db.ItemDB;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Collection;
 
 public class Item {
     private String name;

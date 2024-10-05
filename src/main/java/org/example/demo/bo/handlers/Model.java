@@ -1,7 +1,7 @@
-package org.example.demo.bo;
+package org.example.demo.bo.handlers;
 
 import org.example.demo.bo.PermissionLevel;
-import org.example.demo.bo.User;
+import org.example.demo.bo.models.User;
 import org.example.demo.db.DBManager;
 import org.example.demo.db.UserDB;
 

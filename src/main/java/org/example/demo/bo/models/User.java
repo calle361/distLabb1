@@ -1,4 +1,6 @@
-package org.example.demo.bo;
+package org.example.demo.bo.models;
+
+import org.example.demo.bo.PermissionLevel;
 
 public class User {
     private int uid;

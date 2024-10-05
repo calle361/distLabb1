@@ -1,11 +1,11 @@
 <%@ page import="org.example.demo.db.UserDB" %>
 <%@ page import="org.example.demo.db.DBManager" %>
-<%@ page import="org.example.demo.bo.User" %>
+<%@ page import="org.example.demo.bo.models.User" %>
 <%@ page import="org.example.demo.bo.PermissionLevel" %>
 <%@ page import="java.sql.Connection" %>
 <%@ page import="java.util.Collection" %>
 <%@ page import="org.example.demo.ui.facades.ItemInfo" %>
-<%@ page import="org.example.demo.bo.ItemHandler" %>
+<%@ page import="org.example.demo.bo.handlers.ItemHandler" %>
 <%@ page import="java.util.Iterator" %>
 <%@ page import="java.util.List" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>

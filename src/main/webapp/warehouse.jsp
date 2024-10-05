@@ -1,6 +1,6 @@
-<%@ page import="org.example.demo.bo.ItemHandler" %>
+<%@ page import="org.example.demo.bo.handlers.ItemHandler" %>
 <%@ page import="org.example.demo.ui.facades.ItemInfo" %>
-<%@ page import="org.example.demo.bo.Category" %>
+<%@ page import="org.example.demo.bo.models.Category" %>
 <%@ page import="java.util.Collection" %>
 <%@ page import="java.util.List" %>
 

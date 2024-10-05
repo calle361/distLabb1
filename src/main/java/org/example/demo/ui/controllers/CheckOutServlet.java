@@ -8,7 +8,7 @@ import jakarta.servlet.ServletException;
 
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
-import org.example.demo.bo.OrderHandler;
+import org.example.demo.bo.handlers.OrderHandler;
 
 @WebServlet(name = "CheckOutServlet", value = "/checkout")
 public class CheckOutServlet extends HttpServlet {

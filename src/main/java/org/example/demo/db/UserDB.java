@@ -1,7 +1,7 @@
 package org.example.demo.db;
 
 import org.example.demo.bo.PermissionLevel;
-import org.example.demo.bo.User;
+import org.example.demo.bo.models.User;
 
 import java.sql.*;
 
