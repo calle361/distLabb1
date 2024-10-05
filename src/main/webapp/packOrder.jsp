@@ -1,7 +1,8 @@
 <%@ page import="org.example.demo.bo.models.Order" %>
 <%@ page import="java.util.List" %>
 <%@ page import="org.example.demo.bo.models.OrderItem" %>
-<%@ page import="org.example.demo.bo.handlers.OrderHandler" %><%--
+<%@ page import="org.example.demo.bo.handlers.OrderHandler" %>
+<%@ page import="org.example.demo.ui.facades.OrderInfo" %><%--
   Created by IntelliJ IDEA.
   User: calle
   Date: 2024-10-04
@@ -25,9 +26,9 @@
         </tr>
 
         <%
-            List<Order> orders = (List<Order>) request.getAttribute("orders");
+            List<OrderInfo> orders = (List<OrderInfo>) request.getAttribute("orders");
             if (orders != null) {
-                for (Order order : orders) {
+                for (OrderInfo order : orders) {
         %>
         <tr>
             <td><%= order.getOid() %></td>

@@ -6,6 +6,7 @@
 
 <h1 style="display: inline-block;">Warehouse</h1>
 <a href="index.jsp" style="display: inline-block; margin-left: 20px;">Home page</a>
+<a href="${pageContext.request.contextPath}/order">pack orders</a>
 
 
 <%
@@ -145,7 +146,7 @@
   </tr>
   <% } %>
 </table>
-<a href="${pageContext.request.contextPath}/order">pack orders</a>
+
 <!-- Visar meddelande om något har redigerats -->
 <% if (request.getAttribute("message") != null) { %>
 <p><%= request.getAttribute("message") %></p>

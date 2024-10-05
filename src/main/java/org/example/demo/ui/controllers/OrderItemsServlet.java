@@ -10,6 +10,7 @@ import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
 import org.example.demo.bo.handlers.OrderHandler;
 import org.example.demo.bo.models.OrderItem;
+import org.example.demo.ui.facades.OrderItemInfo;
 
 @WebServlet(name = "OrderItemsServlet", value = "/orderItems")
 public class OrderItemsServlet extends HttpServlet {
@@ -24,7 +25,7 @@ public class OrderItemsServlet extends HttpServlet {
         String orderIdStr = request.getParameter("orderId");
         int orderId = Integer.parseInt(orderIdStr);
         try {
-            List<OrderItem> orderItems = OrderHandler.getOrderItems(orderId);
+            List<OrderItemInfo> orderItems = OrderHandler.getOrderItems(orderId);
             request.setAttribute("orderItems", orderItems);
             RequestDispatcher dispatcher = request.getRequestDispatcher("/orderItems.jsp");
             dispatcher.forward(request, response);

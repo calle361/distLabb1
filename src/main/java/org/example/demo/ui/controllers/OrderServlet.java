@@ -10,6 +10,7 @@ import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
 import org.example.demo.bo.models.Order;
 import org.example.demo.bo.handlers.OrderHandler;
+import org.example.demo.ui.facades.OrderInfo;
 
 @WebServlet(name = "OrderServlet", value = "/order")
 public class OrderServlet extends HttpServlet {
@@ -24,7 +25,7 @@ public class OrderServlet extends HttpServlet {
         //int userId = (int) session.getAttribute("uid"); // Assuming userId is stored in session
 
         try {
-            List<Order> orders = OrderHandler.getAllOrders(sessionUsername);
+            List<OrderInfo> orders = OrderHandler.getAllOrders(sessionUsername);
             request.setAttribute("orders", orders);
             RequestDispatcher dispatcher = request.getRequestDispatcher("/packOrder.jsp");
             dispatcher.forward(request, response);

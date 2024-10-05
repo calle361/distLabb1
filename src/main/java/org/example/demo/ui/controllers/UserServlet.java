@@ -7,6 +7,9 @@ import org.example.demo.bo.PermissionLevel;
 import org.example.demo.bo.handlers.ItemHandler;
 import org.example.demo.bo.handlers.UserHandler;
 import org.example.demo.bo.models.User;
+import org.example.demo.bo.handlers.ItemHandler;
+
+import org.example.demo.bo.models.User;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -75,6 +78,7 @@ public class UserServlet extends HttpServlet {
         }
     }
 
+    // Utloggningshantering
     private void handleLogout(HttpServletRequest request, HttpServletResponse response) throws IOException {
         HttpSession session = request.getSession(false);  // Hämta nuvarande session
         if (session != null) {
