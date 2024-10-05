@@ -5,13 +5,24 @@ import org.example.demo.bo.models.User;
 
 import java.sql.*;
 
+/**
+ * The UserDB class provides static methods to interact with the database for operations
+ * related to users, such as login, registration, updating user roles, and retrieving user details.
+ */
 public class UserDB {
 
-    // Login method
+    /**
+     * Attempts to log in a user by checking the provided username and password against the database.
+     *
+     * @param connection The active {@link Connection} to the database.
+     * @param username The username of the user trying to log in.
+     * @param password The password of the user.
+     * @return A {@link User} object representing the logged-in user, or {@code null} if the login fails.
+     * @throws SQLException If there is an error during the login process or database interaction.
+     */
     public static User login(Connection connection, String username, String password) throws SQLException {
         User result = null;
 
-        // Update to refer to 'users' table
         String query = "SELECT id, permissionlevel FROM users WHERE username = ? AND password = ?";
         try (PreparedStatement userStmt = connection.prepareStatement(query)) {
             userStmt.setString(1, username);
@@ -28,12 +39,20 @@ public class UserDB {
         return result;
     }
 
-    // Register method
+    /**
+     * Registers a new user in the database.
+     *
+     * @param connection The active {@link Connection} to the database.
+     * @param username The username of the new user.
+     * @param password The password of the new user.
+     * @param permissionLevel The permission level of the new user.
+     * @return A {@link User} object representing the newly registered user.
+     * @throws SQLException If there is an error during the registration process or database interaction.
+     */
     public static User register(Connection connection, String username, String password,
                                 PermissionLevel permissionLevel) throws SQLException {
         User result;
 
-        // Update to refer to 'users' table
         String query = "INSERT INTO users (username, password, permissionlevel) VALUES (?, ?, ?)";
         try (PreparedStatement stmt = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
             connection.setAutoCommit(false);
@@ -61,6 +80,15 @@ public class UserDB {
         return result;
     }
 
+    /**
+     * Updates the role (permission level) of a user based on their username.
+     *
+     * @param connection The active {@link Connection} to the database.
+     * @param username The username of the user whose role needs to be updated.
+     * @param newPermissionLevel The new {@link PermissionLevel} to assign to the user.
+     * @return {@code true} if the user's role was successfully updated, {@code false} otherwise.
+     * @throws SQLException If there is an error updating the user's role in the database.
+     */
     public static boolean updateUserRole(Connection connection, String username, PermissionLevel newPermissionLevel) throws SQLException {
         String query = "UPDATE users SET permissionlevel = ? WHERE username = ?";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
@@ -70,6 +98,15 @@ public class UserDB {
             return affectedRows > 0;
         }
     }
+
+    /**
+     * Finds a user in the database based on their username.
+     *
+     * @param connection The active {@link Connection} to the database.
+     * @param username The username to search for.
+     * @return A {@link User} object representing the found user, or {@code null} if no user is found.
+     * @throws SQLException If there is an error during the search process or database interaction.
+     */
     public static User findUserByUsername(Connection connection, String username) throws SQLException {
         User foundUser = null;
 
@@ -89,9 +126,17 @@ public class UserDB {
 
         return foundUser;
     }
+
+    /**
+     * Retrieves the user ID of a user based on their username.
+     *
+     * @param connection The active {@link Connection} to the database.
+     * @param username The username of the user.
+     * @return The user ID of the user.
+     * @throws SQLException If there is an error fetching the user ID from the database.
+     */
     public static int getUserIdByUsername(Connection connection, String username) throws SQLException {
         User user = findUserByUsername(connection, username);
         return user.getUid();
     }
-
 }
