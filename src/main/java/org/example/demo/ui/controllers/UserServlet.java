@@ -10,6 +10,7 @@ import org.example.demo.bo.models.User;
 import org.example.demo.bo.handlers.ItemHandler;
 
 import org.example.demo.bo.models.User;
+import org.example.demo.ui.facades.UserInfo;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -108,7 +109,7 @@ public class UserServlet extends HttpServlet {
         String rememberMe = request.getParameter("rememberMe");
 
         // Använd Model för att hantera inloggning
-        User user = UserHandler.loginUser(username, password);
+        UserInfo user = UserHandler.loginUser(username, password);
 
         if (user != null) {
             HttpSession session = request.getSession();
@@ -142,7 +143,7 @@ public class UserServlet extends HttpServlet {
         PermissionLevel permissionLevel = PermissionLevel.Customer;
 
         // Använd Model för att hantera registrering
-        User user = UserHandler.registerUser(username, password, permissionLevel);
+        UserInfo user = UserHandler.registerUser(username, password, permissionLevel);
 
         if (user != null) {
             response.sendRedirect("login.jsp");  // Skicka till login-sidan efter registrering
@@ -178,7 +179,7 @@ public class UserServlet extends HttpServlet {
         String searchUsername = request.getParameter("searchUsername");
 
         // Använd Model för att hitta användaren
-        User foundUser = UserHandler.findUserByUsername(searchUsername);
+        UserInfo foundUser = UserHandler.findUserByUsername(searchUsername);
 
         if (foundUser != null) {
             request.setAttribute("foundUser", foundUser);  // Spara den hittade användaren i request-attribut

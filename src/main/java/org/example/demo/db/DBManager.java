@@ -8,7 +8,7 @@ public class DBManager {
 
     private static final String DEFAULT_DB = "webshop";
     private static final String USERNAME = "root";
-    private static final String PASSWORD = "123";
+    private static final String PASSWORD = "1234";
     private static Connection connection;
 
     // Singleton-mönster: Ser till att vi bara har en anslutning.
