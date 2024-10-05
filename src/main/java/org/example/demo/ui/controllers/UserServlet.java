@@ -15,11 +15,22 @@ import org.example.demo.ui.facades.UserInfo;
 import java.io.IOException;
 import java.sql.SQLException;
 
+/**
+ * This servlet handles user-related actions such as login, registration, updating roles,
+ * searching for users, and managing items and categories.
+ */
 @WebServlet(name = "userServlet", value = "/user-servlet")
 public class UserServlet extends HttpServlet {
 
 
-
+    /**
+     * Handles GET requests for user actions, such as logout.
+     *
+     * @param request  the HttpServletRequest object
+     * @param response the HttpServletResponse object
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException      if an I/O error occurs
+     */
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         String action = request.getParameter("action");
@@ -35,9 +46,17 @@ public class UserServlet extends HttpServlet {
                 response.sendError(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
                 break;
         }
-
-
     }
+
+    /**
+     * Handles POST requests for various user actions like login, register, updating roles,
+     * managing items, and handling categories.
+     *
+     * @param request  the HttpServletRequest object
+     * @param response the HttpServletResponse object
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException      if an I/O error occurs
+     */
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getParameter("action");
 
@@ -79,11 +98,17 @@ public class UserServlet extends HttpServlet {
         }
     }
 
-    // Utloggningshantering
+    /**
+     * Handles user logout by invalidating the session and removing cookies.
+     *
+     * @param request  the HttpServletRequest object
+     * @param response the HttpServletResponse object
+     * @throws IOException if an I/O error occurs
+     */
     private void handleLogout(HttpServletRequest request, HttpServletResponse response) throws IOException {
         HttpSession session = request.getSession(false);  // Hämta nuvarande session
         if (session != null) {
-            session.invalidate();  // Ogiltigförklara sessionen
+            session.invalidate();
         }
 
         // Ta bort cookies om de finns
@@ -91,18 +116,22 @@ public class UserServlet extends HttpServlet {
         if (cookies != null) {
             for (Cookie cookie : cookies) {
                 if (cookie.getName().equals("username") || cookie.getName().equals("password")) {
-                    cookie.setMaxAge(0);  // Sätt cookie-livslängden till 0 för att ta bort dem
-                    cookie.setMaxAge(0);  // Sätt cookie-livslängden till 0 för att ta bort dem
+                    cookie.setMaxAge(0);
+                    cookie.setMaxAge(0);
                     response.addCookie(cookie);
                 }
             }
         }
-
-        // Skicka tillbaka användaren till index-sidan efter utloggning
         response.sendRedirect("index.jsp");
     }
 
-    // Inloggningshantering med cookies
+    /**
+     * Handles user login and sets session attributes and cookies if 'remember me' is enabled.
+     *
+     * @param request  the HttpServletRequest object
+     * @param response the HttpServletResponse object
+     * @throws IOException if an I/O error occurs
+     */
     private void handleLogin(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
@@ -135,6 +164,13 @@ public class UserServlet extends HttpServlet {
         }
     }
 
+    /**
+     * Handles user registration by creating a new user with default permission level.
+     *
+     * @param request  the HttpServletRequest object
+     * @param response the HttpServletResponse object
+     * @throws IOException if an I/O error occurs
+     */
     private void handleRegister(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
@@ -153,6 +189,14 @@ public class UserServlet extends HttpServlet {
     }
 
 
+    /**
+     * Handles updating a user's role by modifying their permission level.
+     *
+     * @param request  the HttpServletRequest object
+     * @param response the HttpServletResponse object
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException      if an I/O error occurs
+     */
     private void handleUpdateRole(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String username = request.getParameter("username");
         String newRole = request.getParameter("role");
@@ -173,8 +217,14 @@ public class UserServlet extends HttpServlet {
         request.getRequestDispatcher("admin.jsp").forward(request, response);
     }
 
-
-
+    /**
+     * Handles searching for a user by their username.
+     *
+     * @param request  the HttpServletRequest object
+     * @param response the HttpServletResponse object
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException      if an I/O error occurs
+     */
     private void handleSearchUser(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         String searchUsername = request.getParameter("searchUsername");
 
@@ -191,9 +241,14 @@ public class UserServlet extends HttpServlet {
         request.getRequestDispatcher("admin.jsp").forward(request, response);
     }
 
-
-
-
+    /**
+     * Handles updating stock for an item.
+     *
+     * @param request  the HttpServletRequest object
+     * @param response the HttpServletResponse object
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException      if an I/O error occurs
+     */
     private void handleUpdateStock(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         int itemId = Integer.parseInt(request.getParameter("id"));
         int newStock = Integer.parseInt(request.getParameter("newStock"));
@@ -216,7 +271,14 @@ public class UserServlet extends HttpServlet {
         }
     }
 
-
+    /**
+     * Handles adding a new item to the inventory.
+     *
+     * @param request  the HttpServletRequest object
+     * @param response the HttpServletResponse object
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException      if an I/O error occurs
+     */
     private void handleAddItem(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         String name = request.getParameter("name");
         String description = request.getParameter("description");
@@ -235,6 +297,14 @@ public class UserServlet extends HttpServlet {
         request.getRequestDispatcher("warehouse.jsp").forward(request, response);  // Ladda om sidan utan omdirigering
     }
 
+    /**
+     * Handles adding a new category to the inventory.
+     *
+     * @param request  the HttpServletRequest object
+     * @param response the HttpServletResponse object
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException      if an I/O error occurs
+     */
     private void handleAddCategory(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         String categoryName = request.getParameter("categoryName");
 
@@ -249,6 +319,14 @@ public class UserServlet extends HttpServlet {
         request.getRequestDispatcher("warehouse.jsp").forward(request, response);  // Ladda om sidan utan omdirigering
     }
 
+    /**
+     * Handles editing an existing item in the inventory.
+     *
+     * @param request  the HttpServletRequest object
+     * @param response the HttpServletResponse object
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException      if an I/O error occurs
+     */
     private void handleEditItem(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         int itemId = Integer.parseInt(request.getParameter("id"));
         String newName = request.getParameter("name");
@@ -265,6 +343,14 @@ public class UserServlet extends HttpServlet {
         request.getRequestDispatcher("warehouse.jsp").forward(request, response);
     }
 
+    /**
+     * Handles editing an existing category in the inventory.
+     *
+     * @param request  the HttpServletRequest object
+     * @param response the HttpServletResponse object
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException      if an I/O error occurs
+     */
     private void handleEditCategory(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         int categoryId = Integer.parseInt(request.getParameter("categoryId"));
         String newName = request.getParameter("newName");
@@ -276,9 +362,6 @@ public class UserServlet extends HttpServlet {
             e.printStackTrace();
             request.setAttribute("message", "Error updating category: " + e.getMessage());
         }
-
         request.getRequestDispatcher("warehouse.jsp").forward(request, response);
     }
-
-
 }

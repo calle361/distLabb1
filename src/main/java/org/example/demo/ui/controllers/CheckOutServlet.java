@@ -10,12 +10,28 @@ import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
 import org.example.demo.bo.handlers.OrderHandler;
 
+/**
+ * This servlet handles the checkout process for the user's cart. It processes
+ * GET and POST requests related to checkout and transaction handling.
+ */
 @WebServlet(name = "CheckOutServlet", value = "/checkout")
 public class CheckOutServlet extends HttpServlet {
     private String message;
+
+    /**
+     * Initializes the servlet with a welcome message.
+     */
     public void init() {
         message = "Hello World!";
     }
+
+    /**
+     * Handles GET requests by displaying a simple "Hello World" message.
+     *
+     * @param request  the HttpServletRequest object
+     * @param response the HttpServletResponse object
+     * @throws IOException if an I/O error occurs
+     */
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setContentType("text/html");
         // Hello
@@ -24,6 +40,16 @@ public class CheckOutServlet extends HttpServlet {
         out.println("<h1>" + message + "</h1>");
         out.println("</body></html>");
     }
+
+    /**
+     * Handles POST requests by processing the checkout of items and attempting to
+     * complete a transaction.
+     *
+     * @param request  the HttpServletRequest object, containing the item IDs in the cart
+     * @param response the HttpServletResponse object
+     * @throws IOException      if an I/O error occurs
+     * @throws ServletException if a servlet error occurs
+     */
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         // Retrieve the itemIds from the POST request (they will be received as Strings)
         String[] itemIdsStr = request.getParameterValues("itemIds");
@@ -64,6 +90,11 @@ public class CheckOutServlet extends HttpServlet {
         dispatcher.forward(request, response);
 
     }
+
+    /**
+     * This method is called when the servlet is destroyed. Currently, no cleanup
+     * is performed.
+     */
     public void destroy() {
     }
 }
