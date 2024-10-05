@@ -1,47 +1,100 @@
 package org.example.demo.ui.facades;
 
+/**
+ * Represents an order item with associated details such as order item ID,
+ * order ID, item ID, and item name.
+ */
 public class OrderItemInfo {
-    private int OrderItemid;
-    private int Orderid;
-    private int Itemid;
-    private String Itemname;
 
-    public OrderItemInfo(int orderItemid, int orderid, int itemid, String itemname) {
-        this.OrderItemid = orderItemid;
-        this.Orderid = orderid;
-        this.Itemid = itemid;
-        this.Itemname = itemname;
+    private int orderItemId;  // Unique identifier for the order item
+    private int orderId;       // ID of the associated order
+    private int itemId;        // ID of the associated item
+    private String itemName;   // Name of the associated item
+
+    /**
+     * Constructs an OrderItemInfo object with the specified order item details.
+     *
+     * @param orderItemId The unique identifier for the order item.
+     * @param orderId The ID of the associated order.
+     * @param itemId The ID of the associated item.
+     * @param itemName The name of the associated item.
+     */
+    public OrderItemInfo(int orderItemId, int orderId, int itemId, String itemName) {
+        this.orderItemId = orderItemId;
+        this.orderId = orderId;
+        this.itemId = itemId;
+        this.itemName = itemName;
     }
 
-    public int getOrderItemid() {
-        return OrderItemid;
+    /**
+     * Gets the order item ID.
+     *
+     * @return The unique identifier for the order item.
+     */
+    public int getOrderItemId() {
+        return orderItemId;
     }
 
-    public void setOrderItemid(int orderItemid) {
-        OrderItemid = orderItemid;
+    /**
+     * Sets the order item ID.
+     *
+     * @param orderItemId The unique identifier for the order item to set.
+     */
+    public void setOrderItemId(int orderItemId) {
+        this.orderItemId = orderItemId;
     }
 
-    public int getOrderid() {
-        return Orderid;
+    /**
+     * Gets the order ID associated with this order item.
+     *
+     * @return The ID of the associated order.
+     */
+    public int getOrderId() {
+        return orderId;
     }
 
-    public void setOrderid(int orderid) {
-        Orderid = orderid;
+    /**
+     * Sets the order ID associated with this order item.
+     *
+     * @param orderId The ID of the associated order to set.
+     */
+    public void setOrderId(int orderId) {
+        this.orderId = orderId;
     }
 
-    public int getItemid() {
-        return Itemid;
+    /**
+     * Gets the item ID associated with this order item.
+     *
+     * @return The ID of the associated item.
+     */
+    public int getItemId() {
+        return itemId;
     }
 
-    public void setItemid(int itemid) {
-        Itemid = itemid;
+    /**
+     * Sets the item ID associated with this order item.
+     *
+     * @param itemId The ID of the associated item to set.
+     */
+    public void setItemId(int itemId) {
+        this.itemId = itemId;
     }
 
-    public String getItemname() {
-        return Itemname;
+    /**
+     * Gets the name of the item associated with this order item.
+     *
+     * @return The name of the associated item.
+     */
+    public String getItemName() {
+        return itemName;
     }
 
-    public void setItemname(String itemname) {
-        Itemname = itemname;
+    /**
+     * Sets the name of the item associated with this order item.
+     *
+     * @param itemName The name of the associated item to set.
+     */
+    public void setItemName(String itemName) {
+        this.itemName = itemName;
     }
 }

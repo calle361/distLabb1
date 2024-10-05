@@ -7,9 +7,20 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+/**
+ * The ItemDB class provides static methods to interact with the database for CRUD operations
+ * related to the items (products) in the inventory. It includes methods to fetch, update,
+ * and insert item data.
+ */
 public class ItemDB {
 
-    // Method to retrieve all items from the database
+    /**
+     * Retrieves all items from the database.
+     *
+     * @param con The active {@link Connection} to the database.
+     * @return A collection of {@link Item} objects representing all items in the database.
+     * @throws SQLException If there is an error fetching items from the database.
+     */
     public static Collection<Item> getItems(Connection con) throws SQLException {
         List<Item> items = new ArrayList<>();
         Statement st = null;
@@ -17,11 +28,10 @@ public class ItemDB {
 
         try {
             if (con != null && !con.isClosed()) {
-                System.out.println("con is open in get items itemdb");
+                System.out.println("Connection is open in getItems.");
             }
 
             st = con.createStatement();
-            // Lägg till categoryId i din SQL-fråga
             rs = st.executeQuery("SELECT id, name, description, price, stock, categoryid FROM products");
 
             while (rs.next()) {
@@ -30,9 +40,9 @@ public class ItemDB {
                 String description = rs.getString("description");
                 int price = rs.getInt("price");
                 int stock = rs.getInt("stock");
-                int categoryId = rs.getInt("categoryid");  // Hämta categoryId
+                int categoryId = rs.getInt("categoryid");
 
-                // Skapa ett Item-objekt och lägg till det i listan
+                // Create an Item object and add it to the list
                 Item item = new Item(id, name, description, price, stock, categoryId);
                 items.add(item);
             }
@@ -48,7 +58,14 @@ public class ItemDB {
         return items;
     }
 
-
+    /**
+     * Retrieves a single item from the database based on the provided item ID.
+     *
+     * @param connection The active {@link Connection} to the database.
+     * @param idToSearch The ID of the item to search for.
+     * @return An {@link Item} object representing the item, or {@code null} if the item is not found.
+     * @throws SQLException If there is an error fetching the item from the database.
+     */
     public static Item getItem(Connection connection, int idToSearch) throws SQLException {
         Item item = null;
         PreparedStatement ps = null;
@@ -62,7 +79,6 @@ public class ItemDB {
             String sql = "SELECT id, name, description, price, stock, categoryid FROM products WHERE id = ?";
             ps = connection.prepareStatement(sql);
             ps.setInt(1, idToSearch);
-
             rs = ps.executeQuery();
 
             if (rs.next()) {
@@ -71,15 +87,15 @@ public class ItemDB {
                 String description = rs.getString("description");
                 int price = rs.getInt("price");
                 int stock = rs.getInt("stock");
-                int categoryId = rs.getInt("categoryid");  // Hämta categoryId
+                int categoryId = rs.getInt("categoryid");
 
-                // Skapa ett Item-objekt baserat på hämtade data
+                // Create an Item object based on fetched data
                 item = new Item(id, name, description, price, stock, categoryId);
             }
 
         } catch (SQLException e) {
             e.printStackTrace();
-            throw new SQLException("Error fetching items from the database.", e);
+            throw new SQLException("Error fetching the item from the database.", e);
         } finally {
             if (rs != null) rs.close();
             if (ps != null) ps.close();
@@ -87,14 +103,30 @@ public class ItemDB {
 
         return item;
     }
+
+    /**
+     * Retrieves the name of an item based on the provided item ID.
+     *
+     * @param connection The active {@link Connection} to the database.
+     * @param id The ID of the item to search for.
+     * @return The name of the item.
+     * @throws SQLException If there is an error fetching the item name from the database.
+     */
     public static String getItemName(Connection connection, int id) throws SQLException {
-        Item item = getItem(connection,id);
+        Item item = getItem(connection, id);
         return item.getName();
     }
 
-
+    /**
+     * Updates the stock for a specific item in the database.
+     *
+     * @param connection The active {@link Connection} to the database.
+     * @param itemId The ID of the item to update.
+     * @param newStock The new stock value to set.
+     * @throws SQLException If there is an error updating the stock or if the connection is null/closed.
+     */
     public static void updateStock(Connection connection, int itemId, int newStock) throws SQLException {
-        System.out.println("inne i updateStock i itemDB");
+        System.out.println("Inside updateStock in ItemDB");
         if (connection == null) {
             System.out.println("Connection is null");
             throw new SQLException("Database connection is null");
@@ -106,15 +138,24 @@ public class ItemDB {
 
         String query = "UPDATE products SET stock = ? WHERE id = ?";
         try (PreparedStatement ps = connection.prepareStatement(query)) {
-            System.out.println("inne i updateStock i itemDB i try");
             ps.setInt(1, newStock);
             ps.setInt(2, itemId);
             int rowsUpdated = ps.executeUpdate();
-            System.out.println("Rows updated: " + rowsUpdated);  // Kontrollera att uppdatering sker
+            System.out.println("Rows updated: " + rowsUpdated);  // Verify the update
         }
     }
 
-
+    /**
+     * Adds a new item to the database.
+     *
+     * @param connection The active {@link Connection} to the database.
+     * @param name The name of the item.
+     * @param description The description of the item.
+     * @param price The price of the item.
+     * @param stock The stock quantity of the item.
+     * @param categoryId The category ID to associate the item with.
+     * @throws SQLException If there is an error inserting the new item into the database.
+     */
     public static void addItem(Connection connection, String name, String description, double price, int stock, int categoryId) throws SQLException {
         String query = "INSERT INTO products (name, description, price, stock, categoryid) VALUES (?, ?, ?, ?, ?)";
 
@@ -123,12 +164,20 @@ public class ItemDB {
             ps.setString(2, description);
             ps.setDouble(3, price);
             ps.setInt(4, stock);
-            ps.setInt(5, categoryId);  // Lägg till categoryId i INSERT
-
+            ps.setInt(5, categoryId);
             ps.executeUpdate();
         }
     }
 
+    /**
+     * Updates an item's name and category ID in the database.
+     *
+     * @param connection The active {@link Connection} to the database.
+     * @param itemId The ID of the item to update.
+     * @param newName The new name to assign to the item.
+     * @param categoryId The new category ID to associate with the item.
+     * @throws SQLException If there is an error updating the item in the database.
+     */
     public static void updateItem(Connection connection, int itemId, String newName, int categoryId) throws SQLException {
         String query = "UPDATE products SET name = ?, categoryid = ? WHERE id = ?";
         try (PreparedStatement ps = connection.prepareStatement(query)) {
@@ -138,8 +187,4 @@ public class ItemDB {
             ps.executeUpdate();
         }
     }
-
-
-
-
 }
