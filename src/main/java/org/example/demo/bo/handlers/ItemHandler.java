@@ -187,6 +187,7 @@ public class ItemHandler {
             ItemDB.updateItem(connection, itemId, newName, categoryId);
         }
     }
+
     /**
      * Updates the name of an existing category.
      *
@@ -199,6 +200,4 @@ public class ItemHandler {
             CategoryDB.updateCategory(connection, categoryId, newName);
         }
     }
-
-
 }

@@ -34,7 +34,7 @@ public class CheckOutServlet extends HttpServlet {
      */
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setContentType("text/html");
-        // Hello
+
         PrintWriter out = response.getWriter();
         out.println("<html><body>");
         out.println("<h1>" + message + "</h1>");
@@ -51,20 +51,19 @@ public class CheckOutServlet extends HttpServlet {
      * @throws ServletException if a servlet error occurs
      */
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        // Retrieve the itemIds from the POST request (they will be received as Strings)
+
         String[] itemIdsStr = request.getParameterValues("itemIds");
         String checkoutStatus;
         if (itemIdsStr != null) {
-            // Create a list to hold the integer item IDs
+
             List<Integer> itemIds = new ArrayList<>();
 
-            // Convert each string in the array to an integer and add to the list
             for (String idStr : itemIdsStr) {
                 try {
-                    int itemId = Integer.parseInt(idStr);  // Convert string to integer
-                    itemIds.add(itemId);                   // Add to the list
+                    int itemId = Integer.parseInt(idStr);
+                    itemIds.add(itemId);
                 } catch (NumberFormatException e) {
-                    // Handle the case where the string is not a valid integer
+
                     e.printStackTrace();
                 }
             }
@@ -78,13 +77,13 @@ public class CheckOutServlet extends HttpServlet {
             }
 
         } else {
-            // No items received, handle this case
+
             System.out.println("No items received.");
             response.getWriter().println("No items in cart.");
             checkoutStatus="Failed.No items in cart.";
         }
         request.setAttribute("checkoutStatus", checkoutStatus);
-        // Forward the request to checkedOut.jsp
+
         request.getSession().removeAttribute("cart");
         RequestDispatcher dispatcher = request.getRequestDispatcher("/checkedOut.jsp");
         dispatcher.forward(request, response);

@@ -1,9 +1,7 @@
 package org.example.demo.ui.controllers;
 import java.io.*;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.*;
@@ -34,8 +32,6 @@ public class ItemServlet extends HttpServlet {
     @Override
     public void destroy() {
         super.destroy();
-        //Model.shutdown();
-
         System.out.println("SHUTDOWN");
     }
 
@@ -67,17 +63,18 @@ public class ItemServlet extends HttpServlet {
 
         int itemId = Integer.parseInt(request.getParameter("itemId"));
 
+        System.out.println("Item ID: " + itemId);
+
+        response.getWriter().println("Received item ID: " + itemId);
+
         HttpSession session = request.getSession();
-        Map<Integer, Integer> cart = (Map<Integer, Integer>) session.getAttribute("cart");
+        List<Integer> cart = (List<Integer>) session.getAttribute("cart");
         if (cart == null) {
-            cart = new HashMap<>();
+            cart = new ArrayList<>();
             session.setAttribute("cart", cart);
         }
-
-        cart.put(itemId, cart.getOrDefault(itemId, 0) + 1);
-
+        cart.add(itemId);
         System.out.println("Cart: " + cart);
-
         response.sendRedirect(request.getContextPath() + "/index.jsp");
     }
 }

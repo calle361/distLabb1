@@ -44,7 +44,6 @@
 
 <hr>
 
-
 <h2>Add New Item</h2>
 <form method="post" action="user-servlet">
   <input type="hidden" name="action" value="addItem">
@@ -64,7 +63,7 @@
   <label for="category">Category:</label>
   <select id="category" name="category" required>
     <% for (Category category : categories) { %>
-    <option value="<%= category.getId() %>"><%= category.getName() %></option>
+    <option value="<%= category.getId() %>"><%= category.getName() %></option> <!-- Lista alla kategorier -->
     <% } %>
   </select><br><br>
 
@@ -97,12 +96,13 @@
 
   <% for (ItemInfo item : items) { %>
   <tr>
+    <td>
 
       <form method="post" action="user-servlet">
         <input type="hidden" name="action" value="editItem">
         <input type="hidden" name="id" value="<%= item.getId() %>">
         <input type="text" name="name" value="<%= item.getName() %>">
-    </td>
+
     <td>
 
       <select name="category">
@@ -121,6 +121,7 @@
 
 <hr>
 
+
 <h2>Edit Existing Categories</h2>
 <table>
   <tr>
@@ -130,11 +131,13 @@
 
   <% for (Category category : categories) { %>
   <tr>
+    <td>
+
       <form method="post" action="user-servlet">
         <input type="hidden" name="action" value="editCategory">
         <input type="hidden" name="categoryId" value="<%= category.getId() %>">
         <input type="text" name="newName" value="<%= category.getName() %>">
-    </td>
+
     <td>
       <button type="submit">Update Category</button>
       </form>

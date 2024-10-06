@@ -38,9 +38,9 @@ public class DBManager {
      */
     public static boolean connect(String database) throws SQLException {
         try {
-            // Load the JDBC driver for MySQL
+
             Class.forName("com.mysql.cj.jdbc.Driver");
-            // Establish the connection
+
             String url = "jdbc:mysql://localhost:3306/" + database;
             connection = DriverManager.getConnection(url, USERNAME, PASSWORD);
             System.out.println("Connected to database: " + database);

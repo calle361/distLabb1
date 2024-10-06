@@ -3,12 +3,11 @@
 <%@ page import="org.example.demo.bo.models.User" %>
 <%@ page import="org.example.demo.bo.PermissionLevel" %>
 <%@ page import="java.sql.Connection" %>
+<%@ page import="java.util.Collection" %>
 <%@ page import="org.example.demo.ui.facades.ItemInfo" %>
 <%@ page import="org.example.demo.bo.handlers.ItemHandler" %>
 <%@ page import="java.util.Iterator" %>
-<%@ page import="java.util.Map" %>
-<%@ page import="java.util.HashMap" %>
-<%@ page import="java.util.Collection" %>
+<%@ page import="java.util.List" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html>
@@ -69,20 +68,22 @@
 <a href="register.jsp">Register</a><br>
 <% } %>
 
+
 <% if (permissionLevel == PermissionLevel.Admin) { %>
+
 <a href="admin.jsp">Manage Users</a><br>
 <% } else if (permissionLevel == PermissionLevel.Worker) { %>
+
 <a href="warehouse.jsp">Warehouse</a><br>
 <% } %>
 
 <% if (permissionLevel == PermissionLevel.Customer) { %>
 <%
-
-    Map<Integer, Integer> cart = (Map<Integer, Integer>) session.getAttribute("cart");
+    List<String> cart = (List<String>) session.getAttribute("cart");
     if (cart != null) {
         amountInShoppingCart = cart.size();
-    } else {
-        amountInShoppingCart = 0;
+    }else {
+        amountInShoppingCart=0;
     }
 %>
 <a href="shoppingCart.jsp">Kundvagn (<%= amountInShoppingCart %>)</a><br>
@@ -91,7 +92,6 @@
 <hr>
 
 <%
-
     Collection<ItemInfo> items = ItemHandler.getAllItems();
     Iterator<ItemInfo> it = items.iterator();
 %>
@@ -110,7 +110,6 @@
         <% if (sessionUsername != null && permissionLevel == PermissionLevel.Customer) { %>
         <td>
 
-            <!-- Lägg till varor i kundvagnen -->
             <form method="post" action="${pageContext.request.contextPath}/items" style="display: inline;">
                 <input type="hidden" name="itemId" value="<%= item.getId() %>">
                 <button type="submit">Add to cart</button>
@@ -126,6 +125,7 @@
 <% if (sessionUsername != null) { %>
 <br>
 <a href="user-servlet?action=logout">Logout</a><br>
+
 <% } %>
 
 </body>

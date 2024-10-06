@@ -13,7 +13,7 @@ public class Item {
     private String name;
     private int price;
     private int id;
-    private int amount; // Or consider renaming to stock
+    private int amount;
     private String description;
     private int categoryId;
 

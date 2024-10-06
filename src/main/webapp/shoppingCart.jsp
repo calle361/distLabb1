@@ -1,4 +1,4 @@
-<%@ page import="java.util.Map" %>
+<%@ page import="java.util.List" %>
 <%@ page import="org.example.demo.ui.facades.ItemInfo" %>
 <%@ page import="org.example.demo.bo.handlers.ItemHandler" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
@@ -14,31 +14,29 @@
 <ul>
     <%
 
-        Map<Integer, Integer> cart = (Map<Integer, Integer>) session.getAttribute("cart");
+        List<Integer> cart = (List<Integer>) session.getAttribute("cart");
+
 
         if (cart != null && !cart.isEmpty()) {
-            for (Map.Entry<Integer, Integer> entry : cart.entrySet()) {
-                int itemId = entry.getKey();
-                int selectedAmount = entry.getValue();
+            for (int itemId : cart) {
 
                 ItemInfo item = ItemHandler.getItemById(itemId);
                 if (item != null) {
     %>
-    <li><b>Item Name:</b> <%= item.getName() %> | <b>Quantity:</b> <%= selectedAmount %></li>
+    <li><b>Item Name:</b> <%= item.getName() %> | <b>Amount:</b> <%= item.getAmount() %></li>
     <%
             }
         }
     %>
 </ul>
 
+
 <form action="<%= request.getContextPath() %>/checkout" method="post">
     <%
-        for (Map.Entry<Integer, Integer> entry : cart.entrySet()) {
-            int itemId = entry.getKey();
-            int selectedAmount = entry.getValue();
+
+        for (int itemId : cart) {
     %>
     <input type="hidden" name="itemIds" value="<%= itemId %>">
-    <input type="hidden" name="itemAmounts" value="<%= selectedAmount %>">
     <%
         }
     %>
@@ -52,6 +50,5 @@
 <%
     }
 %>
-
 </body>
 </html>
