@@ -27,19 +27,18 @@
     </tr>
 
     <%
-        // Loop through each OrderItem and display its details
         for (OrderItemInfo item : orderItems) {
     %>
     <tr>
-        <td><%= item.getItemname() %></td>
-        <td><%= item.getItemid() %></td>
+        <td><%= item.getItemName() %></td>
+        <td><%= item.getItemId() %></td>
     </tr>
     <%
         }
     %>
 </table>
 
-<!-- Form to submit the order (which will call doPost on the servlet) -->
+
 <form method="post" action="${pageContext.request.contextPath}/orderItems">
     <input type="hidden" name="orderId" value="<%= request.getParameter("orderId") %>">
     <button type="submit">Send Order</button>

@@ -31,13 +31,13 @@
                 for (OrderInfo order : orders) {
         %>
         <tr>
-            <td><%= order.getOid() %></td>
+            <td><%= order.getOrderId() %></td>
             <td><%= order.getDate() %></td>
             <td><%= order.getPrice() %></td>
             <td>
-                <!-- Form to view items of the specific order -->
+
                 <form method="get" action="${pageContext.request.contextPath}/orderItems">
-                    <input type="hidden" name="orderId" value="<%= order.getOid() %>">
+                    <input type="hidden" name="orderId" value="<%= order.getOrderId() %>">
                     <button type="submit">View Order</button>
                 </form>
             </td>

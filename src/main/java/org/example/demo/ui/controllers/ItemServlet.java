@@ -1,7 +1,9 @@
 package org.example.demo.ui.controllers;
 import java.io.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.*;
@@ -65,18 +67,17 @@ public class ItemServlet extends HttpServlet {
 
         int itemId = Integer.parseInt(request.getParameter("itemId"));
 
-        System.out.println("Item ID: " + itemId);
-
-        response.getWriter().println("Received item ID: " + itemId);
-
         HttpSession session = request.getSession();
-        List<Integer> cart = (List<Integer>) session.getAttribute("cart");
+        Map<Integer, Integer> cart = (Map<Integer, Integer>) session.getAttribute("cart");
         if (cart == null) {
-            cart = new ArrayList<>();
+            cart = new HashMap<>();
             session.setAttribute("cart", cart);
         }
-        cart.add(itemId);
+
+        cart.put(itemId, cart.getOrDefault(itemId, 0) + 1);
+
         System.out.println("Cart: " + cart);
+
         response.sendRedirect(request.getContextPath() + "/index.jsp");
     }
 }

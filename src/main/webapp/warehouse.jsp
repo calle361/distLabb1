@@ -10,12 +10,12 @@
 
 
 <%
-  // Hämta alla varor och kategorier från ItemHandler
+
   Collection<ItemInfo> items = ItemHandler.getAllItems();
   List<Category> categories = ItemHandler.getAllCategories();
 %>
 
-<!-- Update Stock Section -->
+
 <h2>Update Stock</h2>
 <table>
   <tr>
@@ -29,7 +29,7 @@
   <tr>
     <td><%= item.getName() %></td>
     <td><%= item.getAmount() %></td>
-    <td><%= item.getCategoryName() %></td> <!-- Visar kategori med namn -->
+    <td><%= item.getCategoryName() %></td>
     <td>
       <form method="post" action="user-servlet">
         <input type="hidden" name="action" value="updateStock">
@@ -44,7 +44,7 @@
 
 <hr>
 
-<!-- Add New Item Section -->
+
 <h2>Add New Item</h2>
 <form method="post" action="user-servlet">
   <input type="hidden" name="action" value="addItem">
@@ -64,7 +64,7 @@
   <label for="category">Category:</label>
   <select id="category" name="category" required>
     <% for (Category category : categories) { %>
-    <option value="<%= category.getId() %>"><%= category.getName() %></option> <!-- Lista alla kategorier -->
+    <option value="<%= category.getId() %>"><%= category.getName() %></option>
     <% } %>
   </select><br><br>
 
@@ -73,7 +73,7 @@
 
 <hr>
 
-<!-- Add New Category Section -->
+
 <h2>Add New Category</h2>
 <form method="post" action="user-servlet">
   <input type="hidden" name="action" value="addCategory">
@@ -86,7 +86,7 @@
 
 <hr>
 
-<!-- Edit Existing Items Section -->
+
 <h2>Edit Existing Items</h2>
 <table>
   <tr>
@@ -97,15 +97,14 @@
 
   <% for (ItemInfo item : items) { %>
   <tr>
-    <td>
-      <!-- Form för att redigera varans namn -->
+
       <form method="post" action="user-servlet">
         <input type="hidden" name="action" value="editItem">
         <input type="hidden" name="id" value="<%= item.getId() %>">
         <input type="text" name="name" value="<%= item.getName() %>">
     </td>
     <td>
-      <!-- Välj en ny kategori för varan -->
+
       <select name="category">
         <% for (Category category : categories) { %>
         <option value="<%= category.getId() %>" <%= category.getName().equals(item.getCategoryName()) ? "selected" : "" %>><%= category.getName() %></option>
@@ -122,7 +121,6 @@
 
 <hr>
 
-<!-- Edit Existing Categories Section -->
 <h2>Edit Existing Categories</h2>
 <table>
   <tr>
@@ -132,8 +130,6 @@
 
   <% for (Category category : categories) { %>
   <tr>
-    <td>
-      <!-- Form för att redigera kategorins namn -->
       <form method="post" action="user-servlet">
         <input type="hidden" name="action" value="editCategory">
         <input type="hidden" name="categoryId" value="<%= category.getId() %>">
@@ -147,7 +143,6 @@
   <% } %>
 </table>
 
-<!-- Visar meddelande om något har redigerats -->
 <% if (request.getAttribute("message") != null) { %>
 <p><%= request.getAttribute("message") %></p>
 <% } %>

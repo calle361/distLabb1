@@ -1,8 +1,9 @@
 <%@ page import="org.example.demo.bo.PermissionLevel" %>
 <%@ page import="org.example.demo.bo.models.User" %>
+<%@ page import="org.example.demo.ui.facades.UserInfo" %>
 
 <%
-    User foundUser = (User) request.getAttribute("foundUser");
+    UserInfo foundUser = (UserInfo) request.getAttribute("foundUser");
     String message = (String) request.getAttribute("message");
     String searchPerformed = request.getParameter("searchPerformed");
 %>
