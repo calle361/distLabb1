@@ -10,7 +10,7 @@ import jakarta.servlet.annotation.*;
 /**
  * This servlet handles adding items to the user's shopping cart and responding to both GET and POST requests.
  */
-@WebServlet(name = "TestServlet", value = "/items")
+@WebServlet(name = "ItemServlet", value = "/items")
 public class ItemServlet extends HttpServlet {
     private String message;
 

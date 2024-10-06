@@ -5,6 +5,7 @@ import org.example.demo.bo.models.Item;
 import org.example.demo.db.CategoryDB;
 import org.example.demo.db.DBManager;
 import org.example.demo.db.ItemDB;
+import org.example.demo.ui.facades.CategoryInfo;
 import org.example.demo.ui.facades.ItemInfo;
 
 import java.sql.Connection;
@@ -141,9 +142,14 @@ public class ItemHandler {
      * @throws SQLException If an SQL error occurs during the retrieval process.
      */
     // Hämta alla kategorier
-    public static List<Category> getAllCategories() throws SQLException {
+    public static List<CategoryInfo> getAllCategories() throws SQLException {
         try (Connection connection = dbManager.getConnection()) {
-            return CategoryDB.getAllCategories(connection);
+            List<Category> category=CategoryDB.getAllCategories(connection);
+            List<CategoryInfo> categoryInfos = new ArrayList<>();
+            for (Category c : category) {
+                categoryInfos.add(new CategoryInfo(c.getId(),c.getName()));
+            }
+            return categoryInfos;
         }
     }
 
@@ -169,9 +175,11 @@ public class ItemHandler {
      * @throws SQLException If an SQL error occurs during the retrieval process.
      */
     // Hämta en kategori baserat på ID
-    public static Category getCategoryById(int id) throws SQLException {
+    public static CategoryInfo getCategoryById(int id) throws SQLException {
         try (Connection connection = dbManager.getConnection()) {
-            return CategoryDB.getCategoryById(connection, id);
+            Category category=CategoryDB.getCategoryById(connection, id);
+            CategoryInfo c=new CategoryInfo(category.getId(), category.getName());
+            return c;
         }
     }
     /**

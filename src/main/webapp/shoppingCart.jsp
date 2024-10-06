@@ -23,7 +23,7 @@
                 ItemInfo item = ItemHandler.getItemById(itemId);
                 if (item != null) {
     %>
-    <li><b>Item Name:</b> <%= item.getName() %> | <b>Amount:</b> <%= item.getAmount() %></li>
+    <li><b>Item Name:</b> <%= item.getName() %> | <b>Amount in stock:</b> <%= item.getAmount() %></li>
     <%
             }
         }

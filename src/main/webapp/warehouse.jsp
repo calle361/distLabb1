@@ -3,6 +3,7 @@
 <%@ page import="org.example.demo.bo.models.Category" %>
 <%@ page import="java.util.Collection" %>
 <%@ page import="java.util.List" %>
+<%@ page import="org.example.demo.ui.facades.CategoryInfo" %>
 
 <h1 style="display: inline-block;">Warehouse</h1>
 <a href="index.jsp" style="display: inline-block; margin-left: 20px;">Home page</a>
@@ -12,7 +13,7 @@
 <%
 
   Collection<ItemInfo> items = ItemHandler.getAllItems();
-  List<Category> categories = ItemHandler.getAllCategories();
+  List<CategoryInfo> categories = ItemHandler.getAllCategories();
 %>
 
 
@@ -62,7 +63,7 @@
 
   <label for="category">Category:</label>
   <select id="category" name="category" required>
-    <% for (Category category : categories) { %>
+    <% for (CategoryInfo category : categories) { %>
     <option value="<%= category.getId() %>"><%= category.getName() %></option> <!-- Lista alla kategorier -->
     <% } %>
   </select><br><br>
@@ -106,7 +107,7 @@
     <td>
 
       <select name="category">
-        <% for (Category category : categories) { %>
+        <% for (CategoryInfo category : categories) { %>
         <option value="<%= category.getId() %>" <%= category.getName().equals(item.getCategoryName()) ? "selected" : "" %>><%= category.getName() %></option>
         <% } %>
       </select>
@@ -129,7 +130,7 @@
     <th>Actions</th>
   </tr>
 
-  <% for (Category category : categories) { %>
+  <% for (CategoryInfo category : categories) { %>
   <tr>
     <td>
 
