@@ -4,7 +4,7 @@
 <%
     User foundUser = (User) request.getAttribute("foundUser");
     String message = (String) request.getAttribute("message");
-    String searchPerformed = request.getParameter("searchPerformed"); // Kontrollera om en sökning har genomförts
+    String searchPerformed = request.getParameter("searchPerformed");
 %>
 
 <h1 style="display: inline-block;">Manage Users</h1>
@@ -28,7 +28,7 @@
 <p>Current Role: <%= foundUser.getPermissionLevel() %></p>
 
 <form method="post" action="user-servlet">
-    <input type="hidden" name="action" value="updateRole"> <!-- Action för att uppdatera roller -->
+    <input type="hidden" name="action" value="updateRole">
     <input type="hidden" name="username" value="<%= foundUser.getName() %>">
 
     <label for="role">Update Role:</label>

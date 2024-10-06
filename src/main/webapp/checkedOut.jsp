@@ -13,7 +13,7 @@
     <%!
     %>
     <%
-        // Retrieve the checkoutStatus attribute from the request
+
         checkoutStatus = (String) request.getAttribute("checkoutStatus");
 
 

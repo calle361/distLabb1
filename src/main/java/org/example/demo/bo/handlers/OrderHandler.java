@@ -37,22 +37,18 @@ public class OrderHandler {
 
         try {
             System.out.println("Processing the transaction...");
-            // Step 1: Get the connection
             conn = dbManager.getConnection();
-            // Step 2: Disable auto-commit for transaction handling
             conn.setAutoCommit(false);
 
             int totPrice = 0;
             List<String> itemNames = new ArrayList<>();
 
-            // Step 3: Check stock for each item and reduce stock if available
             for (int itemId : ids) {
                 int stock = ItemHandler.getstockById(itemId);
                 totPrice += ItemHandler.getPriceById(itemId);
                 itemNames.add(ItemDB.getItemName(conn, itemId));
 
                 if (stock > 0) {
-                    // Reduce stock for this item
                     ItemHandler.updateStock2(conn, itemId, stock - 1);
                     System.out.println("Stock updated for item ID: " + itemId);
                 } else {
@@ -60,30 +56,27 @@ public class OrderHandler {
                 }
             }
 
-            // Step 4: Create an order if all stock updates succeed
             int userId = UserDB.getUserIdByUsername(dbManager.getConnection(), username);
-            int orderId = OrderDB.createOrder(dbManager.getConnection(), userId, totPrice); // Create the order
-            OrderDB.createOrderItems(dbManager.getConnection(), orderId, ids, itemNames);  // Create order items
+            int orderId = OrderDB.createOrder(dbManager.getConnection(), userId, totPrice);
+            OrderDB.createOrderItems(dbManager.getConnection(), orderId, ids, itemNames);
 
-            // Step 5: Commit the transaction
             conn.commit();
             successFlag = true;
 
         } catch (Exception e) {
-            // Handle rollback on failure
+
             if (conn != null) {
                 try {
-                    conn.rollback();  // Rollback transaction on error
+                    conn.rollback();
                 } catch (SQLException ex) {
                     ex.printStackTrace();
                 }
             }
             e.printStackTrace();
         } finally {
-            // Always restore auto-commit and close the connection
             if (conn != null) {
                 try {
-                    conn.setAutoCommit(true);  // Reset auto-commit
+                    conn.setAutoCommit(true);
                 } catch (SQLException ex) {
                     ex.printStackTrace();
                 }
@@ -104,7 +97,6 @@ public class OrderHandler {
         Connection conn = dbManager.getConnection();
         List<Order> orders = OrderDB.getAllOrders(conn);
 
-        // Convert each order to OrderInfo (facade)
         List<OrderInfo> orderInfos = new ArrayList<>();
         for (Order order : orders) {
             orderInfos.add(new OrderInfo(order.getOid(), order.getPrice(), order.getUserid(), order.getDate()));

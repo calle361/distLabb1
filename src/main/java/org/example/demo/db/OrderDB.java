@@ -57,10 +57,10 @@ public class OrderDB {
                 ps.setInt(1, orderId);
                 ps.setInt(2, productId);
                 ps.setString(3, itemName.get(i));
-                ps.addBatch();  // Add to batch for batch execution
+                ps.addBatch();
                 i++;
             }
-            ps.executeBatch();  // Execute the batch
+            ps.executeBatch();
         }
     }
 
@@ -78,7 +78,7 @@ public class OrderDB {
         try (PreparedStatement ps = connection.prepareStatement(query)) {
             ps.setInt(1, orderId);
             ps.setInt(2, productId);
-            ps.executeUpdate();  // Execute the insert for a single item
+            ps.executeUpdate();
         }
     }
 
@@ -101,7 +101,6 @@ public class OrderDB {
                 Timestamp orderDate = rs.getTimestamp("order_date");
                 int totalPrice = rs.getInt("total_price");
 
-                // Create an Order object and add it to the list
                 orders.add(new Order(orderId, totalPrice, userId, orderDate));
             }
         }
@@ -127,7 +126,6 @@ public class OrderDB {
                     int productId = rs.getInt("product_id");
                     String productName = rs.getString("product_name");
 
-                    // Create an OrderItem object and add it to the list
                     orderItems.add(new OrderItem(orderItemId, orderId, productId, productName));
                 }
             }
@@ -147,9 +145,8 @@ public class OrderDB {
         String query = "DELETE FROM orders WHERE order_id = ?";
         try (PreparedStatement ps = connection.prepareStatement(query)) {
             ps.setInt(1, orderId);
-            int rowsAffected = ps.executeUpdate();  // Number of rows deleted
+            int rowsAffected = ps.executeUpdate();
 
-            // Check if any rows were affected (i.e., if the order existed and was deleted)
             return rowsAffected > 0;
         } catch (SQLException e) {
             e.printStackTrace();

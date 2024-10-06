@@ -22,12 +22,6 @@ public class ItemServlet extends HttpServlet {
      */
     @Override
     public void init() throws ServletException {
-    /*
-        System.out.println("INITIALIZE\n\n\n\n\n");
-
-        Model.initialize();
-
-     */
         super.init();
     }
 
@@ -68,31 +62,21 @@ public class ItemServlet extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        // Get the itemId from the form (this comes from the hidden input field)
+
         int itemId = Integer.parseInt(request.getParameter("itemId"));
 
-        // Print the itemId to the console (for debugging purposes)
         System.out.println("Item ID: " + itemId);
 
-        // You can also send a response back to the client to confirm
         response.getWriter().println("Received item ID: " + itemId);
 
-        // Get or create the shopping cart (stored in the session)
         HttpSession session = request.getSession();
         List<Integer> cart = (List<Integer>) session.getAttribute("cart");
         if (cart == null) {
             cart = new ArrayList<>();
             session.setAttribute("cart", cart);
         }
-
-        // Add the new item to the cart
         cart.add(itemId);
-
-        // Optionally, print cart contents for debugging
         System.out.println("Cart: " + cart);
-
-        // Send response
         response.sendRedirect(request.getContextPath() + "/index.jsp");
-
     }
 }

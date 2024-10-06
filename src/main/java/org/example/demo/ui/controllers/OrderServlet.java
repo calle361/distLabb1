@@ -39,7 +39,6 @@ public class OrderServlet extends HttpServlet {
         HttpSession session = request.getSession();
 
         String sessionUsername = (String) session.getAttribute("username");
-        //int userId = (int) session.getAttribute("uid"); // Assuming userId is stored in session
 
         try {
             List<OrderInfo> orders = OrderHandler.getAllOrders(sessionUsername);
@@ -48,7 +47,7 @@ public class OrderServlet extends HttpServlet {
             dispatcher.forward(request, response);
         } catch (SQLException | ServletException e) {
             e.printStackTrace();
-            // Handle errors (e.g., show an error page)
+
         }
     }
 

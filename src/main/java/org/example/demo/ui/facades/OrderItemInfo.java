@@ -6,10 +6,10 @@ package org.example.demo.ui.facades;
  */
 public class OrderItemInfo {
 
-    private int orderItemId;  // Unique identifier for the order item
-    private int orderId;       // ID of the associated order
-    private int itemId;        // ID of the associated item
-    private String itemName;   // Name of the associated item
+    private int orderItemId;
+    private int orderId;
+    private int itemId;
+    private String itemName;
 
     /**
      * Constructs an OrderItemInfo object with the specified order item details.

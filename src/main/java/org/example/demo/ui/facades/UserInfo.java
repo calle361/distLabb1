@@ -8,9 +8,9 @@ import org.example.demo.bo.PermissionLevel;
  */
 public class UserInfo {
 
-    private int uid;                    // Unique identifier for the user
-    private String name;                // Name of the user
-    private PermissionLevel permissionLevel;  // User's permission level
+    private int uid;
+    private String name;
+    private PermissionLevel permissionLevel;
 
     /**
      * Constructs a UserInfo object with the specified user details.

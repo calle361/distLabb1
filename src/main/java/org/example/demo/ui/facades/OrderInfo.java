@@ -8,10 +8,10 @@ import java.sql.Timestamp;
  */
 public class OrderInfo {
 
-    private int orderId;      // Unique identifier for the order
-    private int price;        // Total price of the order
-    private int userId;       // ID of the user who placed the order
-    private Timestamp date;    // Date when the order was placed
+    private int orderId;
+    private int price;
+    private int userId;
+    private Timestamp date;
 
     /**
      * Constructs an OrderInfo object with the specified order details.

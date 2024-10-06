@@ -35,12 +35,12 @@ public class UserServlet extends HttpServlet {
 
         String action = request.getParameter("action");
         if (action == null) {
-            action = "login";  // Standardaction
+            action = "login";
         }
 
         switch (action) {
             case "logout":
-                handleLogout(request, response);  // Hantera utloggning vid GET
+                handleLogout(request, response);
                 break;
             default:
                 response.sendError(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
@@ -61,7 +61,7 @@ public class UserServlet extends HttpServlet {
         String action = request.getParameter("action");
 
         if (action == null) {
-            action = "login";  // Default action
+            action = "login";
         }
 
         switch (action) {
@@ -84,16 +84,16 @@ public class UserServlet extends HttpServlet {
                 handleEditItem(request, response);
                 break;
             case "updateStock":
-                handleUpdateStock(request, response);  // Ny action för att hantera lageruppdatering
+                handleUpdateStock(request, response);
                 break;
             case "addCategory":
-                handleAddCategory(request, response);  // Ny action för att hantera lageruppdatering
+                handleAddCategory(request, response);
                 break;
             case "editCategory":
                 handleEditCategory(request, response);
                 break;
             default:
-                response.sendRedirect("error.jsp");  // Handle unknown actions
+                response.sendRedirect("error.jsp");
                 break;
         }
     }
@@ -106,12 +106,11 @@ public class UserServlet extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     private void handleLogout(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        HttpSession session = request.getSession(false);  // Hämta nuvarande session
+        HttpSession session = request.getSession(false);
         if (session != null) {
             session.invalidate();
         }
 
-        // Ta bort cookies om de finns
         Cookie[] cookies = request.getCookies();
         if (cookies != null) {
             for (Cookie cookie : cookies) {
@@ -137,27 +136,24 @@ public class UserServlet extends HttpServlet {
         String password = request.getParameter("password");
         String rememberMe = request.getParameter("rememberMe");
 
-        // Använd Model för att hantera inloggning
         UserInfo user = UserHandler.loginUser(username, password);
 
         if (user != null) {
             HttpSession session = request.getSession();
             session.setAttribute("username", username);
-            session.setAttribute("permissionLevel", user.getPermissionLevel());  // Spara behörighetsnivån i sessionen
+            session.setAttribute("permissionLevel", user.getPermissionLevel());
 
-            System.out.println("User logged in with permission level: " + user.getPermissionLevel());  // Logga behörigheten
+            System.out.println("User logged in with permission level: " + user.getPermissionLevel());
 
-            // Hantera 'remember me' - cookie
             if ("on".equals(rememberMe)) {
                 Cookie usernameCookie = new Cookie("username", username);
-                usernameCookie.setMaxAge(60 * 60 * 24 * 7);  // Sätt cookie-livslängd till 7 dagar
+                usernameCookie.setMaxAge(60 * 60 * 24 * 7);
                 response.addCookie(usernameCookie);
 
                 Cookie passwordCookie = new Cookie("password", password);
-                passwordCookie.setMaxAge(60 * 60 * 24 * 7);  // Sätt cookie-livslängd till 7 dagar
+                passwordCookie.setMaxAge(60 * 60 * 24 * 7);
                 response.addCookie(passwordCookie);
             }
-
             response.sendRedirect("index.jsp");
         } else {
             response.getWriter().println("Login failed! Please try again.");
@@ -175,14 +171,12 @@ public class UserServlet extends HttpServlet {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
 
-        // Sätt en standardbehörighet (Customer)
         PermissionLevel permissionLevel = PermissionLevel.Customer;
 
-        // Använd Model för att hantera registrering
         UserInfo user = UserHandler.registerUser(username, password, permissionLevel);
 
         if (user != null) {
-            response.sendRedirect("login.jsp");  // Skicka till login-sidan efter registrering
+            response.sendRedirect("login.jsp");
         } else {
             response.getWriter().println("Registration failed.");
         }
@@ -201,10 +195,8 @@ public class UserServlet extends HttpServlet {
         String username = request.getParameter("username");
         String newRole = request.getParameter("role");
 
-        // Konvertera strängen "role" till PermissionLevel
         PermissionLevel newPermissionLevel = PermissionLevel.valueOf(newRole);
 
-        // Använd Model för att uppdatera användarroll
         boolean updated = UserHandler.updateUserRole(username, newPermissionLevel);
 
         if (updated) {
@@ -213,7 +205,6 @@ public class UserServlet extends HttpServlet {
             request.setAttribute("message", "Failed to update user role.");
         }
 
-        // Ladda om samma sida (admin.jsp)
         request.getRequestDispatcher("admin.jsp").forward(request, response);
     }
 
@@ -228,16 +219,14 @@ public class UserServlet extends HttpServlet {
     private void handleSearchUser(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         String searchUsername = request.getParameter("searchUsername");
 
-        // Använd Model för att hitta användaren
         UserInfo foundUser = UserHandler.findUserByUsername(searchUsername);
 
         if (foundUser != null) {
-            request.setAttribute("foundUser", foundUser);  // Spara den hittade användaren i request-attribut
+            request.setAttribute("foundUser", foundUser);
         } else {
-            request.setAttribute("message", "No user found with username: " + searchUsername);  // Skicka ett felmeddelande om användaren inte hittas
+            request.setAttribute("message", "No user found with username: " + searchUsername);
         }
 
-        // Vid fel eller framgång, ladda om samma sida (admin.jsp)
         request.getRequestDispatcher("admin.jsp").forward(request, response);
     }
 
@@ -254,19 +243,13 @@ public class UserServlet extends HttpServlet {
         int newStock = Integer.parseInt(request.getParameter("newStock"));
 
         try {
-            // Använd business-lagret (ItemHandler) för att uppdatera lagerstatus
+
             ItemHandler.updateStock(itemId, newStock);
-
-            // Logga för felsökning (valfritt)
             System.out.println("Stock for item " + itemId + " updated to " + newStock);
-
-            // Omdirigera till warehouse.jsp för att ladda om sidan med uppdaterade data
             response.sendRedirect("warehouse.jsp");
         } catch (SQLException e) {
             e.printStackTrace();
             request.setAttribute("message", "Error updating stock: " + e.getMessage());
-
-            // Vid fel, ladda om sidan med felmeddelande
             request.getRequestDispatcher("warehouse.jsp").forward(request, response);
         }
     }
@@ -287,14 +270,14 @@ public class UserServlet extends HttpServlet {
         int categoryId = Integer.parseInt(request.getParameter("category"));
 
         try {
-            ItemHandler.addItem(name, description, price, stock, categoryId);  // Använd business-lagret
+            ItemHandler.addItem(name, description, price, stock, categoryId);
             request.setAttribute("message", "Item added successfully.");
         } catch (SQLException e) {
             e.printStackTrace();
             request.setAttribute("message", "Error adding item: " + e.getMessage());
         }
 
-        request.getRequestDispatcher("warehouse.jsp").forward(request, response);  // Ladda om sidan utan omdirigering
+        request.getRequestDispatcher("warehouse.jsp").forward(request, response);
     }
 
     /**
@@ -309,14 +292,14 @@ public class UserServlet extends HttpServlet {
         String categoryName = request.getParameter("categoryName");
 
         try {
-            ItemHandler.addCategory(categoryName);  // Använd ItemHandler för att lägga till kategori
+            ItemHandler.addCategory(categoryName);
             request.setAttribute("message", "Category added successfully.");
         } catch (SQLException e) {
             e.printStackTrace();
             request.setAttribute("message", "Error adding category: " + e.getMessage());
         }
 
-        request.getRequestDispatcher("warehouse.jsp").forward(request, response);  // Ladda om sidan utan omdirigering
+        request.getRequestDispatcher("warehouse.jsp").forward(request, response);
     }
 
     /**

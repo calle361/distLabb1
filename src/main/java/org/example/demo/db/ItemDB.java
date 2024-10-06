@@ -42,7 +42,6 @@ public class ItemDB {
                 int stock = rs.getInt("stock");
                 int categoryId = rs.getInt("categoryid");
 
-                // Create an Item object and add it to the list
                 Item item = new Item(id, name, description, price, stock, categoryId);
                 items.add(item);
             }
@@ -89,7 +88,6 @@ public class ItemDB {
                 int stock = rs.getInt("stock");
                 int categoryId = rs.getInt("categoryid");
 
-                // Create an Item object based on fetched data
                 item = new Item(id, name, description, price, stock, categoryId);
             }
 
@@ -141,7 +139,7 @@ public class ItemDB {
             ps.setInt(1, newStock);
             ps.setInt(2, itemId);
             int rowsUpdated = ps.executeUpdate();
-            System.out.println("Rows updated: " + rowsUpdated);  // Verify the update
+            System.out.println("Rows updated: " + rowsUpdated);
         }
     }
 

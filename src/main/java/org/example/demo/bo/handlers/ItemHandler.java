@@ -21,9 +21,6 @@ import java.util.List;
  */
 public class ItemHandler {
     static DBManager dbManager;
-    //static Connection conn=Model.getConnection();
-
-
 
     /**
      * Retrieves all items from the database along with their associated category.
@@ -32,26 +29,22 @@ public class ItemHandler {
      * @throws SQLException If an SQL error occurs during the retrieval process.
      */
     public static Collection<ItemInfo> getAllItems() throws SQLException {
-        // Use generics to specify type safety
         Connection conn = dbManager.getConnection();
 
         Collection<Item> itemsFromDb = ItemDB.getItems(conn);
         List<ItemInfo> items = new ArrayList<>();
 
-        // Use enhanced for-loop for better readability
         for (Item item : itemsFromDb) {
-            // Hämta kategori för varje produkt
             Category category = CategoryDB.getCategoryById(conn, item.getCategoryId());
             items.add(new ItemInfo(
                     item.getId(),
                     item.getName(),
-                    item.getDescription(),  // Corrected to method call
+                    item.getDescription(),
                     item.getPrice(),
                     item.getAmount(),
-                    category  // Lägg till kategori i ItemInfo
+                    category
             ));
         }
-
         return items;
     }
 
@@ -79,7 +72,6 @@ public class ItemHandler {
         Item itemFromDb=ItemDB.getItem(dbManager.getConnection(),id);
         int stock=itemFromDb.getAmount();
         return stock;
-
     }
 
     /**

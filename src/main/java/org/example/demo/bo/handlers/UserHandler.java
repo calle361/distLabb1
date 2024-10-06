@@ -14,7 +14,7 @@ import java.sql.SQLException;
  * finding users by username, and updating user roles. It serves as an interface between the
  * application logic and the database operations defined in the {@link UserDB} class.
  */
-public class UserHandler {
+public class  UserHandler {
 
     static DBManager dbManager;
 

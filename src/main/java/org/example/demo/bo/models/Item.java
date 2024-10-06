@@ -46,7 +46,7 @@ public class Item {
         try {
             category = CategoryDB.getCategoryById(DBManager.getConnection(), this.categoryId);
         } catch (SQLException e) {
-            e.printStackTrace();  // Handle the error gracefully
+            e.printStackTrace();
         }
         return category;
     }

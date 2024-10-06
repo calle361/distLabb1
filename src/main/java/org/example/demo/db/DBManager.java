@@ -24,7 +24,7 @@ public class DBManager {
      */
     public static Connection getConnection() throws SQLException {
         if (connection == null || connection.isClosed()) {
-            connect(DEFAULT_DB);  // Attempt to reconnect if the connection is null or closed.
+            connect(DEFAULT_DB);
         }
         return connection;
     }

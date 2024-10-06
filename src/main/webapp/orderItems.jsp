@@ -15,10 +15,8 @@
 <body>
 <h1>Order Items</h1>
 <%
-    // Get the order items from the request attribute
     List<OrderItemInfo> orderItems = (List<OrderItemInfo>) request.getAttribute("orderItems");
 
-    // Check if the list is not empty
     if (orderItems != null && !orderItems.isEmpty()) {
 %>
 <table border="1">
